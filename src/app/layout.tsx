@@ -1,10 +1,8 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
+import "./globals.css";
 
-// components
-
-const rubik = Rubik({ subsets: ["latin"] });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,12 +11,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
-      <body className={rubik.className}>{children}</body>
+      <body className={spaceGrotesk.className}>{children}</body>
     </html>
   );
 }

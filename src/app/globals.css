@@ -2,4 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* base styles */
+:root {
+  --accent: hsl(160 84% 39%);
+  --primary: hsl(160 85% 87%);
+  --text: hsl(0 0% 100%);
+  --secondary: hsl(160 85% 87%);
+  --error: hsl(354 84% 57%);
+  --Purplish-blue: hsl(243 100% 62%);
+}
+
+
+@layer base {
+  ::-webkit-scrollbar {
+    width: 0.525rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 100vh;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--primary);
+  }
+}
