@@ -3,24 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --accent: hsl(160 84% 39%);
+  --accent: #10b77f;
   --primary: hsl(160 85% 87%);
   --text: hsl(0 0% 100%);
   --secondary: hsl(160 85% 87%);
   --error: hsl(354 84% 57%);
   --Purplish-blue: hsl(243 100% 62%);
+  --white: hsl(0 0% 100%);
+  --background: hsl(157, 68%, 96%);
 }
 
-
 @layer base {
+  body {
+    background: var(--background);
+  }
   ::-webkit-scrollbar {
     width: 0.525rem;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: var(--accent);
+    background-color: hsl(0, 1%, 67%);
     border-radius: 100vh;
   }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
   ::-webkit-scrollbar-track {
-    background: var(--primary);
+    background: var(--background);
   }
 }

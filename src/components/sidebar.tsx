@@ -1,24 +1,30 @@
 'use client';
-import { useState } from 'react';
 import SidebarLink from './sidebar-link';
 import UserButton from './user-button';
 import SignInButton from './sign-in-button';
-import { BiBook, BiPen } from 'react-icons/bi';
-import { CgProfile } from 'react-icons/cg';
+import { BsJournal, BsJournals } from 'react-icons/bs';
+import { TiPen } from 'react-icons/ti';
+import Image from 'next/image';
+import { FaRegUser, FaUser } from 'react-icons/fa';
 
 const Sidebar = () => {
-
-   const user = null;
+  const user = null;
 
   return (
     <>
       <aside
-        className={`max-md:hidden z-50 border-r bg-white transition-all duration-300 sticky top-[60px] h-full max-h-[calc(100svh-60px)]`}
+        className={`max-md:hidden z-50 border-r border-r-primary bg-main transition-all duration-300 sticky top-[60px] h-full max-h-[calc(100vh-120px)]`}
       >
         <nav className='h-full flex flex-col gap-6 py-6 px-4 justify-between transition-all duration-300'>
           <div className='relative flex justify-between items-center'>
             <div className='flex text-xl items-center font-bold'>
-              <div className='w-10 h-10 rounded-full bg-accent/80'></div>
+              <Image
+                src='/wordgen.png'
+                alt='logo'
+                width={40}
+                height={40}
+                className='rounded-lg'
+              />
             </div>
           </div>
 
@@ -27,27 +33,23 @@ const Sidebar = () => {
             <SidebarLink
               path='/jurnal/new'
               text='new jurnal'
-              icon={<BiPen size={25} />}
-            />
-            <SidebarLink
-              path='/profile'
-              text='profile'
-              icon={<CgProfile size={25} />}
+              icon={<TiPen size={20} />}
             />
             <SidebarLink
               path='/jurnal/jurnals'
               text='jurnals'
-              icon={<BiBook size={25} />}
+              icon={<BsJournals size={20} />}
+            />
+            <SidebarLink
+              path='/profile'
+              text='profile'
+              icon={<FaRegUser size={20} />}
             />
           </ul>
 
           {/* user info | auth status */}
-          <div className='border-t px-1 pt-2 bg-eme'>
-            {user ? (
-              <UserButton user={user} />
-            ) : (
-              <SignInButton  />
-            )}
+          <div className='border-t border-t-primary px-1 pt-2'>
+            {user ? <UserButton user={user} /> : <SignInButton />}
           </div>
         </nav>
       </aside>
