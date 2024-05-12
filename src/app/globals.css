@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Coolvetica';
+  src: url('/fonts/Coolvetica W00 Regular.otf') format('opentype');
+}
+
 :root {
   --accent: #10b77f;
   --primary: hsl(160 85% 87%);
@@ -30,4 +35,16 @@
   ::-webkit-scrollbar-track {
     background: var(--background);
   }
+}
+
+/* quill js styles */
+
+.ql-container {
+  font-size: 1.125rem !important;
+  font-family: 'Coolvetica', sans-serif;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  color: #a0a0a0 !important;
+  font-weight: 400 !important;
 }

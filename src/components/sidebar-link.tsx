@@ -15,7 +15,7 @@ function SidebarLink(props: SidebarLinkProps) {
     <li className='relative group'>
       <Link
         href={props.path}
-        className={`tracking-widest text-sm rounded-md p-2 font-medium flex items-center group focus-visible:outline-accent focus-visible:text-accent ${
+        className={`tracking-widest text-sm rounded-md p-2 font-medium flex items-center justify-center focus-visible:outline-accent focus-visible:text-accent ${
           pathname === props.path ? 'text-accent bg-accent/20' : ''
         }`}
       >

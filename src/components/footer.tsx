@@ -4,7 +4,7 @@ import { BsDiscord, BsInstagram, BsTwitter } from 'react-icons/bs';
 
 function Footer() {
   return (
-    <footer className='sticky bottom-0 h-[60px] flex justify-center items-center border-t border-t-primary py-4 px-6 md:px-8 lg:px-24 max-w-[90rem] mx-auto'>
+    <footer className='sticky bottom-0 h-[60px] flex justify-center items-center bg-main border-t border-t-primary py-4 px-6 md:px-8 lg:px-24 max-w-[90rem] mx-auto'>
       <ul className='flex gap-4 text-accent'>
         <li>
           <Link href='https://discord.gg/NuqrZARzCb' target='_blank'>
