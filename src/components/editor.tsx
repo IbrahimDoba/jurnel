@@ -16,47 +16,13 @@ function Editor({
     []
   );
 
-  const myColors = [
-    'purple',
-    '#785412',
-    '#452632',
-    '#856325',
-    '#963254',
-    '#254563',
-    'white',
-  ];
-
-  const formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'color',
-    'image',
-    'background',
-    'align',
-  ];
+  const myColors = ['white', 'green', 'yellow', 'orange', 'blue', 'pink'];
 
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, false] }],
-      [{ size: [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ align: ['right', 'center', 'justify'] }],
-      [{ color: myColors }, { background: myColors }],
-      [
-        { list: 'ordered' },
-        { list: 'bullet' },
-        { indent: '-1' },
-        { indent: '+1' },
-      ],
-      ['link', 'image'],
-      ['clean'],
+      ['bold', 'italic', 'link', 'underline', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ color: myColors }],
     ],
   };
 
@@ -64,11 +30,11 @@ function Editor({
     <ReactQuill
       id='content'
       theme='bubble'
-      className='focus-within:outline-1 focus-within:outline-dashed'
       value={value}
       onChange={onChange}
       modules={modules}
-      placeholder='Whats on your mind...'
+      className='bg-white min-h-56 h-full w-full p-2 rounded-b-md'
+      placeholder='Whats on your mind?'
     />
   );
 }

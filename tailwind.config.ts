@@ -14,10 +14,10 @@ const config: Config = {
         secondary: 'hsl(204, 86%, 53%)',
         txt: 'hsl(209, 61%, 16%)',
         error: 'hsl(354 84% 57%)',
-        main: 'hsl(160 73% 93%)',
+        main: 'hsl(157, 68%, 96%)',
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };
 export default config;

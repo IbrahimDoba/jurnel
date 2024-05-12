@@ -6,7 +6,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <>
       <div className='relative grid md:grid-cols-[auto_1fr]'>
         <Sidebar />
-        <main className='min-h-[calc(100vh-60px)]'>{children}</main>
+        <div className='min-h-[calc(100vh-60px)]'>{children}</div>
       </div>
     </>
   );
