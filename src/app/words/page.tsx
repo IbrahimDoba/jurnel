@@ -1,9 +1,12 @@
-import React from 'react'
+import Word from "@/components/word";
+import React from "react";
 
 function Words() {
   return (
-    <div>Words</div>
-  )
+    <div>
+      <Word />
+    </div>
+  );
 }
 
-export default Words
+export default Words;
