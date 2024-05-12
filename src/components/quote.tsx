@@ -45,7 +45,7 @@ function Quote() {
         <button
           type="button"
           onClick={generateQuote}
-          className="focus:outline-none text-white bg-emerald-500 hover:bg-emerald-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-xs px-5 py-2 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          className="focus:outline-none text-white bg-accent hover:bg-emerald-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-xs px-5 py-2 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         >
           Another Quote!
         </button>

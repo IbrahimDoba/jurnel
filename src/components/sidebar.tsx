@@ -6,6 +6,7 @@ import { BsJournal, BsJournals } from 'react-icons/bs';
 import { TiPen } from 'react-icons/ti';
 import Image from 'next/image';
 import { FaRegUser, FaUser } from 'react-icons/fa';
+import Link from 'next/link';
 
 const Sidebar = () => {
   const user = null;
@@ -13,11 +14,11 @@ const Sidebar = () => {
   return (
     <>
       <aside
-        className={`max-md:hidden z-50 border-r border-r-primary bg-main transition-all duration-300 sticky top-[60px] h-full max-h-[calc(100vh-120px)]`}
+        className={`max-md:hidden z-50 border-r border-r-primary bg-main transition-all duration-300 sticky top-0 h-full max-h-[100svh]`}
       >
         <nav className='h-full flex flex-col gap-6 py-6 px-4 justify-between transition-all duration-300'>
           <div className='relative flex justify-between items-center'>
-            <div className='flex text-xl items-center font-bold'>
+            <Link href='/words' className='flex text-xl items-center font-bold'>
               <Image
                 src='/wordgen.png'
                 alt='logo'
@@ -25,7 +26,7 @@ const Sidebar = () => {
                 height={40}
                 className='rounded-lg'
               />
-            </div>
+            </Link>
           </div>
 
           {/* main nav */}
