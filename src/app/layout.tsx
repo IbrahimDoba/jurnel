@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
-import { Space_Grotesk } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
+import "./globals.css";
+import ReduxWrapper from "./ReduxWrapper";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'WordGen',
+    default: "WordGen",
     template: `%s - WordGen`,
   },
-  description: 'Learn new words and journal.',
+  description: "Learn new words and journal.",
 };
 
 export default function RootLayout({
@@ -18,11 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <ReduxWrapper>
       <body className={spaceGrotesk.className}>
         {children}
-        <div id='portal'></div>
+        <div id="portal"></div>
       </body>
-    </html>
+    </ReduxWrapper>
   );
 }
