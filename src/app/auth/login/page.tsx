@@ -28,7 +28,7 @@ const Login = () => {
           })
         );
         //  SEND USER TO THE APPROPRIATE PAGE AFTER Login
-        router.push("/jurnal/new");
+        router.push("/jurnal/jurnals");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");
@@ -57,7 +57,7 @@ const Login = () => {
           })
         );
         // SEND USER TO THE APPROPRIATE PAGE AFTER Logi
-        router.push("/jurnal/new");
+        router.push("/jurnal/jurnals");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");

@@ -7,6 +7,7 @@ import { journalCollectionRef } from "@/firebase";
 import { journalType } from "../../../../../types";
 import { IRootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 function Page() {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
@@ -27,6 +28,7 @@ function Page() {
       await addDoc(journalCollectionRef, {
         userEmail: user.email,
         value: editorContent,
+        dateCreated: moment().format("YYYY-MM-DD"),
       } as journalType)
         .then(() => {
           // DO SOMETHING WHEN THE JOURNALK IS SAVED
