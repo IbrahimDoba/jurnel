@@ -6,6 +6,8 @@ import { BsJournal, BsJournals } from 'react-icons/bs';
 import { TiPen } from 'react-icons/ti';
 import Image from 'next/image';
 import { FaRegUser, FaUser } from 'react-icons/fa';
+import { CiCircleList } from "react-icons/ci";
+
 import Link from 'next/link';
 
 const Sidebar = () => {
@@ -42,9 +44,9 @@ const Sidebar = () => {
               icon={<BsJournals size={20} />}
             />
             <SidebarLink
-              path='/profile'
-              text='profile'
-              icon={<FaRegUser size={20} />}
+              path='/list'
+              text='list'
+              icon={<CiCircleList size={20} />}
             />
           </ul>
 

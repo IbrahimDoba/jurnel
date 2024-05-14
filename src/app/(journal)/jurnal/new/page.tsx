@@ -41,7 +41,7 @@ function Page() {
   };
   return (
     <section className="flex items-center h-full w-full">
-      <div className="flex flex-col w-full max-w-[500px] mx-auto shadow rounded-md bg-white">
+      <div className="flex flex-col w-full max-w-[800px] mx-auto shadow rounded-md bg-white">
         <div className="flex flex-col items-center py-4 border-b border-primary">
           <span className="text-sm mb-2 text-red-700">{errorMsg}</span>
           <h1 className="text-2xl font-bold text-center text-txt">
