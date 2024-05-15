@@ -8,15 +8,16 @@ import { useSelector } from 'react-redux';
 import {  BiSave } from 'react-icons/bi';
 import { LuTrash } from 'react-icons/lu';
 import Tiptap from './tiptap';
+import { defaultHtml } from '@/data/default';
 
-function JournalEntry() {
+function JournalEntry({defaultContent}:{defaultContent:string}) {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [journalTitle, setJournalTitle] = useState<string>(
     'Welcome Jurnal by Wordgen 🎉'
   );
-  const [editorContent, setEditorContent] = useState<string | undefined>();
+  const [editorContent, setEditorContent] = useState<string>(defaultContent);
 
 
   const handleSave = async () => {
@@ -74,7 +75,7 @@ function JournalEntry() {
           </button>
         </div>
       </div>
-      <Tiptap setEditorContent={setEditorContent} />
+      <Tiptap defaultContent={editorContent} setEditorContent={setEditorContent} />
     </div>
   );
 }
