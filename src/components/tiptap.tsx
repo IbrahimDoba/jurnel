@@ -8,7 +8,7 @@ import { defaultHtml } from '@/data/default';
 import { FaBold, FaItalic , FaList, FaQuoteLeft, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import Progress from './progress';
 
-const Tiptap = ({setEditorContent}:{setEditorContent:React.Dispatch<React.SetStateAction<string | undefined>>}) => {
+const Tiptap = ({setEditorContent, defaultContent}:{setEditorContent:React.Dispatch<React.SetStateAction<string>>, defaultContent:string}) => {
   const limit = 1000;
 
   const editor = useEditor({
@@ -19,7 +19,7 @@ const Tiptap = ({setEditorContent}:{setEditorContent:React.Dispatch<React.SetSta
       }),
       // TaskList.configure({}),
     ],
-    content: defaultHtml,
+    content: defaultContent,
     editorProps: {
       attributes: {
         class: 'p-6 focus:outline-none',
