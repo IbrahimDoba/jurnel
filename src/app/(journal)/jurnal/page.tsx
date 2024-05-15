@@ -1,11 +1,10 @@
+
 import JournalEntry from '@/components/journal-entry';
 
 function Jurnal() {
   return (
-    <section className='grid place-content-center h-full'>
-      <ul className='max-w-screen-lg mx-auto'>
-        <JournalEntry />
-      </ul>
+    <section className='flex justify-center items-start h-full py-10'>
+      <JournalEntry />
     </section>
   );
 }

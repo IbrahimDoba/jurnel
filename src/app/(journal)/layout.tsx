@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  
   return (
     <>
       <main className='min-h-screen relative grid grid-cols-[auto_1fr]'>
