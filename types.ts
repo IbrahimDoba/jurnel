@@ -1,6 +1,8 @@
 export type journalType = {
+  id?: string;
   userEmail: string;
   value: string;
+  dateCreated: string;
   label?: string;
   style?: string;
 };
