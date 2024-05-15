@@ -1,20 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
-import namesAndMeaning from "../components/namesData.json";
+import { useState } from "react";
+import namesAndMeaning from "@/data/names.json";
 
 interface itemsProps {
   name: string;
   meaning: string;
 }
+
 function Name() {
   const [randomName, setRandomName] = useState<itemsProps>();
   const generateName = async () => {
     const randomItem = namesAndMeaning.sort(() => 0.5 - Math.random())[0];
     setRandomName(randomItem);
   };
-  // useEffect(()=>{
-  //   generateName()
-  // })
 
   return (
     <div className="flex flex-col gap-6">

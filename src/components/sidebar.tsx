@@ -5,18 +5,20 @@ import SignInButton from './sign-in-button';
 import { BsJournal, BsJournals } from 'react-icons/bs';
 import { TiPen } from 'react-icons/ti';
 import Image from 'next/image';
-import { FaRegUser, FaUser } from 'react-icons/fa';
-import { CiCircleList } from "react-icons/ci";
+import { FiPlusCircle } from 'react-icons/fi';
+import { CiCircleList } from 'react-icons/ci';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const Sidebar = () => {
   const user = null;
+  const pathname = usePathname();
 
   return (
     <>
       <aside
-        className={`max-md:hidden z-50 border-r border-r-primary bg-main transition-all duration-300 sticky top-0 h-full max-h-[100svh]`}
+        className={`max-md:hidden z-50 border-r border-dashed border-r-primary bg-main transition-all duration-300 sticky top-0 h-full max-h-[100svh]`}
       >
         <nav className='h-full flex flex-col gap-6 py-6 px-4 justify-between transition-all duration-300'>
           <div className='relative flex justify-between items-center'>
@@ -33,19 +35,28 @@ const Sidebar = () => {
 
           {/* main nav */}
           <ul className='flex flex-col gap-4 min-w-full py-4'>
+            {/* <li>
+              <button
+                title='new'
+                type='button'
+                className='flex items-center gap-2 bg-accent rounded-full p-4 text-white'
+              >
+                <FiPlusCircle size={20} />
+              </button>
+            </li> */}
             <SidebarLink
               path='/jurnal/new'
-              text='new jurnal'
-              icon={<TiPen size={20} />}
+              text={`new ${pathname === '/jurnal' ? 'jurnal' : 'list'}`}
+              icon={<FiPlusCircle size={20} />}
             />
             <SidebarLink
-              path='/jurnal/jurnals'
+              path='/jurnal'
               text='jurnals'
               icon={<BsJournals size={20} />}
             />
             <SidebarLink
-              path='/list'
-              text='list'
+              path='/lists'
+              text='lists'
               icon={<CiCircleList size={20} />}
             />
           </ul>
