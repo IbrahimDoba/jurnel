@@ -35,20 +35,6 @@ const Sidebar = () => {
 
           {/* main nav */}
           <ul className='flex flex-col gap-4 min-w-full py-4'>
-            {/* <li>
-              <button
-                title='new'
-                type='button'
-                className='flex items-center gap-2 bg-accent rounded-full p-4 text-white'
-              >
-                <FiPlusCircle size={20} />
-              </button>
-            </li> */}
-            <SidebarLink
-              path='/jurnal/new'
-              text={`new ${pathname === '/jurnal' ? 'jurnal' : 'list'}`}
-              icon={<FiPlusCircle size={20} />}
-            />
             <SidebarLink
               path='/jurnal'
               text='jurnals'
