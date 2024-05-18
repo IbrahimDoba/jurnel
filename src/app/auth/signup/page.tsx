@@ -22,7 +22,8 @@ const SignUp = () => {
         //  SEND USER TO THE APPROPRIATE PAGE AFTER SIGN UP
         router.push("/words");
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log("ERROR: ", e);
         setErrorMsg(
           "Somthing went wrong creating your account, please try again"
         );
@@ -56,7 +57,11 @@ const SignUp = () => {
         // SEND USER TO THE APPROPRIATE PAGE AFTER SIGN UP
         router.push("/words");
       })
-      .catch(() => {
+      .catch((e) => {
+        if (e.message === "Firebase: Error (auth/email-already-in-use).") {
+          setErrorMsg("User with this email already exists");
+          return;
+        }
         setErrorMsg(
           "Somthing went wrong creating your account, please try again"
         );
