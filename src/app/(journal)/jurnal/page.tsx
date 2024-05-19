@@ -117,6 +117,11 @@ function Jurnal() {
         dateCreated:
           checkTodayAvailable.length !== 0 ? journals[0].dateCreated : today, // initial journals will be first one in teh list, so it makes sense to display it's date, but if it is for yesterday, display Today as the date and nothing as the list of journals
       });
+    } else {
+      setDisplayJournals({
+        activeJournal: [],
+        dateCreated: today,
+      });
     }
   }, [journals, today]);
 
