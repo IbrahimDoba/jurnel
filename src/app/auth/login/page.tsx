@@ -58,7 +58,7 @@ const Login = () => {
             id: res.user.uid,
           })
         );
-        router.push("/jurnal/jurnals");
+        router.push("/jurnal");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");
