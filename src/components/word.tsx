@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import LoadSpinner from "./loadSpinner";
 function Word() {
   const [words, setWords] = useState([]);
   const [partOfSpeech, setPartOfSpeech] = useState<string>("");
@@ -45,7 +45,7 @@ function Word() {
       <section className="max-h-24 h-24 flex flex-auto justify-center mt-24">
         <div className="container flex justify-center flex-col items-center align-middle ">
           {isLoading ? (
-            <div>Loading...</div>
+            <div><LoadSpinner/></div>
           ) : (
             <div className="flex flex-col">
               <p className="text-3xl uppercase mb-4 text-emerald-500 justify-center font-bold">
@@ -68,7 +68,7 @@ function Word() {
         <button
           type="button"
           onClick={generateWord}
-          className="focus:outline-none text-white bg-emerald-500 hover:bg-emerald-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-xs px-5 py-2 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          className="focus:outline-none text-white bg-accent hover:bg-emerald-600  font-medium rounded-lg text-xs px-5 py-2 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 "
         >
           Another Quote!
         </button>

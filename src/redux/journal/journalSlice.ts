@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { journalType } from "../../../types";
+import { sortJournalsByDate } from "@/utils/helpers";
 
 type initialStateType = {
   journals: journalType[];
@@ -24,6 +25,10 @@ const journalSlice = createSlice({
         ...payload,
       };
     },
+    addJournal: (state, { payload }: { payload: journalType }) => {
+      const combinedJournals = sortJournalsByDate([...state.journals, payload]);
+      state.journals = combinedJournals;
+    },
     deleteJournal: (state, { payload }: { payload: any }) => {
       const filterOutJournal = state.journals.filter(
         (j) => j.id !== payload.id
@@ -33,6 +38,6 @@ const journalSlice = createSlice({
   },
 });
 
-export const { fetchJournals, updateJournal, deleteJournal } =
+export const { fetchJournals, updateJournal, deleteJournal, addJournal } =
   journalSlice.actions;
 export default journalSlice.reducer;

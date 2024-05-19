@@ -10,7 +10,7 @@ import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { journalType } from "../../../../../types";
+import { DisplayJournalType, EditorProp, journalType } from "../../../../../types";
 import { useRouter } from "next/navigation";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { MdOutlineEdit } from "react-icons/md";
@@ -24,15 +24,7 @@ import {
 } from "@/utils/helpers";
 import moment from "moment";
 
-type DisplayJournalType = {
-  activeJournal: journalType[];
-  dateCreated: string;
-};
-type EditorProp = {
-  editorValue: ReactQuill.Value;
-  refId: string;
-  dateCreated: string;
-};
+
 const Jonrals = () => {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const { journals } = useSelector((state: IRootState) => state.journal);

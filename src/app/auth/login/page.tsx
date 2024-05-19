@@ -2,6 +2,7 @@
 import { auth, googleProvider } from "@/firebase";
 import { login } from "@/redux/auth/authSlice";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -27,14 +28,14 @@ const Login = () => {
             profilePicture: res.user.photoURL ?? undefined,
           })
         );
-        //  SEND USER TO THE APPROPRIATE PAGE AFTER Login
-        router.push("/jurnal/jurnals");
+        router.push("/jurnal");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");
       });
     setIsLoading(false);
   };
+
   const handleCheckFields = () => {
     setErrorMsg("");
     if (loginData.email && loginData.password) {
@@ -43,6 +44,7 @@ const Login = () => {
     setErrorMsg("Both fields are required");
     return false;
   };
+
   const handleSubmit = async () => {
     if (!handleCheckFields()) {
       return;
@@ -56,7 +58,6 @@ const Login = () => {
             id: res.user.uid,
           })
         );
-        // SEND USER TO THE APPROPRIATE PAGE AFTER Logi
         router.push("/jurnal/jurnals");
       })
       .catch(() => {
@@ -64,48 +65,80 @@ const Login = () => {
       });
     setIsLoading(false);
   };
-  return (
-    <div className="flex flex-col p-10">
-      <div className="flex flex-col">
-        <span>Login</span>
-        <span className="text-red-600 font-bold mt-4">{errorMsg}</span>
-        <span className="text-lg font-semibold">Email</span>
-        <input
-          type="text"
-          placeholder="johndoe@mail.com"
-          value={loginData.email}
-          onChange={(e) =>
-            setLoginData({ ...loginData, email: e.target.value })
-          }
-          className="p-4"
-        />
-        <span className="mt-6">Password</span>
-        <input
-          className="p-4"
-          type="password"
-          placeholder="*****"
-          value={loginData.password}
-          onChange={(e) =>
-            setLoginData({ ...loginData, password: e.target.value })
-          }
-        />
 
-        <button
-          disabled={isLoading}
-          onClick={handleSubmit}
-          className="p-3 mt-4 bg-blue-400 rounded-md"
-        >
-          {isLoading ? "loading..." : "Submit"}
-        </button>
-      </div>
-      <span className="self-center my-5">Or</span>
-      <div className="self-center">
-        <button
-          onClick={handleSignUpWithGoogle}
-          className="bg-white border-[1px] border-neutral-800  rounded-lg p-4 self-center font-bold text-pink-600"
-        >
-          Login With Google
-        </button>
+  return (
+    <div className="min-h-screen bg-emerald-100 flex items-center justify-center">
+      <div className="w-full max-w-xs mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="text"
+            placeholder="johndoe@mail.com"
+            value={loginData.email}
+            onChange={(e) =>
+              setLoginData({ ...loginData, email: e.target.value })
+            }
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="password"
+            placeholder="******"
+            value={loginData.password}
+            onChange={(e) =>
+              setLoginData({ ...loginData, password: e.target.value })
+            }
+          />
+        </div>
+        <div className="flex items-center justify-center"> {/* change to between when forgot password func is available */}
+          <button
+            disabled={isLoading}
+            onClick={handleSubmit}
+            className={` bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {isLoading ? "Loading..." : "Sign In"}
+          </button>
+          {/* <a
+            href="#"
+            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+          >
+            Forgot Password?
+          </a> */}
+        </div>
+        <div className="mt-6 text-center">
+          <div className="w-full border-t border-gray-200"></div>
+        </div>
+        <div className="mt-6 text-center">
+          <span className="inline-block align-baseline font-bold text-sm text-black hover:text-black">
+            Or sign in with
+          </span>
+          <button
+            onClick={handleSignUpWithGoogle}
+            className="ml-4 bg-blue-400 border border-gray-300 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-500 hover:border-gray-400"
+          >
+            Google
+          </button>
+        </div>
+        <p className="mt-4 justify-center items-center flex">
+          Click here to <Link href='/auth/signup' className="underline ml-2 text-blue-800 cursor-pointer">Register</Link>
+        </p>
       </div>
     </div>
   );
