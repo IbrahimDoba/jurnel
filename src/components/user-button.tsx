@@ -70,16 +70,16 @@ function UserButton({ user }: { user: UserButtonProps }) {
           !popover ? "invisible animate-up" : "visible animate-down"
         } transition-all duration-300`}
       >
-        <div className="flex gap-4 py-4 px-5 items-center border-b">
+        <div className="flex gap-4 py-4 px-5 items-center border-b text-accent">
           <CgUser size={18} />
           <div className="flex flex-col">
-            <p className="text-accent">{user.name}</p>
+            <p>{user.name}</p>
             <p className="text-sm">{user.email}</p>
           </div>
         </div>
         <button
           type="button"
-          className="flex gap-4 items-center py-4 px-5 hover:bg-accent/10 transition duration-300"
+          className="flex gap-4 items-center py-4 px-5 text-accent hover:bg-primary transition duration-300"
           onClick={() => dispatch(logout())}
         >
           <BiLogOut size={18} />
