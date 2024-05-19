@@ -34,12 +34,6 @@ const Tiptap = ({
             class: 'pl-2',
           },
         },
-        heading: {
-          HTMLAttributes: {
-            class: 'font-bold text-lg',
-          },
-          levels: [2, 3, 4],
-        },
         orderedList: { HTMLAttributes: { class: 'list-decimal pl-6' } },
         bulletList: { HTMLAttributes: { class: 'list-disc pl-6' } },
       }),
