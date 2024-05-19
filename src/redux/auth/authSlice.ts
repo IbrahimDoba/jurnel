@@ -28,6 +28,7 @@ const userSlice = createSlice({
       state.user = {
         email: "",
         id: "",
+        profilePicture: "",
       };
       state.isLogged = false;
       window.location.reload;

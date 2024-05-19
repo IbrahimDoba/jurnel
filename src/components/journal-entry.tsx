@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { BiSave } from "react-icons/bi";
 import { LuTrash } from "react-icons/lu";
 import Tiptap from "./tiptap";
+import { useDebounce } from "use-debounce";
+
 import {
   addJournal,
   deleteJournal,
@@ -41,12 +43,18 @@ function JournalEntry({
   const [errorMsg, setErrorMsg] = useState("");
   const [journalTitle, setJournalTitle] = useState<string>(title);
   const [editorContent, setEditorContent] = useState<string>(body);
+  const [debouncedContent] = useDebounce(editorContent, 1000);
+
   const dispatch = useDispatch();
 
   const handleDelete = async () => {
-    const journalToDelete = doc(db, "journal", id);
-    dispatch(deleteJournal({ id }));
-    await deleteDoc(journalToDelete);
+    if (id) {
+      const journalToDelete = doc(db, "journal", id);
+      dispatch(deleteJournal({ id }));
+      await deleteDoc(journalToDelete);
+    } else {
+      setEntryForToday(null);
+    }
   };
 
   const handleSave = async () => {
@@ -111,6 +119,11 @@ function JournalEntry({
     setEditorContent(body);
   }, [title, body]);
 
+  // AUTO SAVE useEffect
+  useEffect(() => {
+    handleSave();
+  }, [debouncedContent]);
+
   return (
     <div className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
       <div className="px-4 py-3 grid grid-cols-[1fr_auto] gap-6 border-b border-primary border-dashed">
@@ -130,7 +143,7 @@ function JournalEntry({
         {!welcomeEntry && (
           <div className="flex gap-2 items-center">
             {isSaving && <span>Saving...</span>}
-            <button
+            {/* <button
               title="save"
               type="button"
               onClick={handleSave}
@@ -138,7 +151,7 @@ function JournalEntry({
               className="hover:bg-primary rounded-md p-1 h-fit w-fit transition duration-200 hover:text-accent"
             >
               <BiSave size={20} />
-            </button>
+            </button> */}
             <button
               title="delete"
               type="button"

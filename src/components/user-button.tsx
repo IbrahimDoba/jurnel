@@ -1,8 +1,10 @@
 "use client";
+import { logout } from "@/redux/auth/authSlice";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { CgUser } from "react-icons/cg";
+import { useDispatch } from "react-redux";
 
 interface UserButtonProps {
   email?: string | null | undefined;
@@ -14,7 +16,7 @@ interface UserButtonProps {
 function UserButton({ user }: { user: UserButtonProps }) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [popover, setPopover] = useState(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (!popover) return;
 
@@ -78,10 +80,7 @@ function UserButton({ user }: { user: UserButtonProps }) {
         <button
           type="button"
           className="flex gap-4 items-center py-4 px-5 hover:bg-accent/10 transition duration-300"
-          onClick={() =>
-            // signOut()
-            ""
-          }
+          onClick={() => dispatch(logout())}
         >
           <BiLogOut size={18} />
           <span className="text-sm">sign out</span>

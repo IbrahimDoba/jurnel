@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSave } from "react-icons/bi";
 import { FaTrash } from "react-icons/fa";
 import { TodoType } from "../../types";
@@ -9,6 +9,7 @@ import { db, todoCollectionRef } from "@/firebase";
 import { addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { addTodo, deleteTodo, updateTodo } from "@/redux/todo/todoSlice";
 import { ColorRing } from "react-loader-spinner";
+import { useDebounce } from "use-debounce";
 
 const TodoItemCard = ({
   todoItem,
@@ -20,11 +21,13 @@ const TodoItemCard = ({
   setNewItem: any;
 }) => {
   const dispatch = useDispatch();
-  const { isLogged } = useSelector((state: IRootState) => state.user);
+  const { isLogged, user } = useSelector((state: IRootState) => state.user);
 
   const [itemValue, setItemValue] = useState(todoItem);
+  const [trackValue, setTrackValue] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [debouncedContent] = useDebounce(trackValue, 1000);
 
   const handleSave = async () => {
     if (!isLogged) {
@@ -36,16 +39,16 @@ const TodoItemCard = ({
       setErrorMsg("");
       setIsSaving(true);
       await addDoc(todoCollectionRef, {
-        userEmail: todoItem.userEmail,
+        userEmail: user.email,
         headerTitle: headerTitle,
         value: itemValue.value,
       })
         .then((res) => {
           dispatch(
             addTodo({
-              userEmail: todoItem.userEmail,
+              userEmail: user.email,
               headerTitle: headerTitle,
-              value: itemValue.value,
+              value: trackValue,
               id: res.id,
             })
           );
@@ -60,8 +63,9 @@ const TodoItemCard = ({
 
       setIsSaving(true);
       await setDoc(docRef, {
+        userEmail: user.email,
         headerTitle: todoItem.headerTitle,
-        value: todoItem.value,
+        value: trackValue,
       })
         .then(() => {
           dispatch(updateTodo(todoItem));
@@ -75,10 +79,21 @@ const TodoItemCard = ({
   };
 
   const handleDelete = async () => {
-    const todoDelete = doc(db, "todo", todoItem.id);
-    dispatch(deleteTodo({ id: todoItem.id }));
-    await deleteDoc(todoDelete);
+    if (todoItem.id) {
+      const todoDelete = doc(db, "todo", todoItem.id);
+      dispatch(deleteTodo({ id: todoItem.id }));
+      await deleteDoc(todoDelete);
+    } else {
+      setNewItem(null);
+    }
   };
+
+  // AUTO SAVE useEffect
+  useEffect(() => {
+    if (user.email) {
+      handleSave();
+    }
+  }, [debouncedContent, user.email]);
   return (
     <ul className="justify-center items-center flex flex-col">
       <li className="flex gap-2 justify-between items-center border-b border-gray-200 py-2 px-4 group">
@@ -87,9 +102,10 @@ const TodoItemCard = ({
             type="text"
             // value={title}
             defaultValue={itemValue.value}
-            onChange={(e) =>
-              setItemValue({ ...itemValue, value: e.target.value })
-            }
+            onChange={(e) => {
+              setItemValue({ ...itemValue, value: e.target.value });
+              setTrackValue(e.target.value);
+            }}
             autoFocus
             placeholder="Your item here"
             className=" w-full outline-none bg-slate-50 p-2 border border-slate-50 group-hover:border-black group-hover:border  group-hover:border-dashed rounded-md"
