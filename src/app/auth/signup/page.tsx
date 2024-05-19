@@ -1,8 +1,10 @@
 "use client";
 import { auth, googleProvider } from "@/firebase";
+import { login } from "@/redux/auth/authSlice";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
   const [errorMsg, setErrorMsg] = useState("");
@@ -12,24 +14,33 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const handleSignUpWithGoogle = async () => {
     setIsLoading(true);
     const result = await signInWithPopup(auth, googleProvider)
-     .then((res) => {
-        console.log("GOOGLE AUTH", res);
-        router.push("/words");
+      .then((res) => {
+        dispatch(
+          login({
+            email: res.user.email ?? "",
+            id: res.user.uid,
+            profilePicture: res.user.photoURL ?? undefined,
+          })
+        );
+        router.push("/jurnal");
       })
-     .catch(() => {
-        setErrorMsg("Something went wrong creating your account, please try again.");
+      .catch(() => {
+        setErrorMsg(
+          "Something went wrong creating your account, please try again."
+        );
       });
     setIsLoading(false);
   };
 
   const handleCheckFields = () => {
     setErrorMsg("");
-    if (signUpData.password!== signUpData.confirmPassword) {
+    if (signUpData.password !== signUpData.confirmPassword) {
       setErrorMsg("Passwords do not match");
       return false;
     }
@@ -45,13 +56,23 @@ const SignUp = () => {
       return;
     }
     setIsLoading(true);
-    await createUserWithEmailAndPassword(auth, signUpData.email, signUpData.password)
-     .then((res) => {
+    await createUserWithEmailAndPassword(
+      auth,
+      signUpData.email,
+      signUpData.password
+    )
+      .then((res) => {
         console.log("SIGN UP: ", res);
         router.push("/words");
       })
-     .catch(() => {
-        setErrorMsg("Something went wrong creating your account, please try again.");
+      .catch((e) => {
+        if (e.message === "Firebase: Error (auth/email-already-in-use).") {
+          setErrorMsg("User with this email already exists");
+          return;
+        }
+        setErrorMsg(
+          "Somthing went wrong creating your account, please try again"
+        );
       });
     setIsLoading(false);
   };
@@ -60,7 +81,10 @@ const SignUp = () => {
     <div className="min-h-screen bg-emerald-100 flex items-center justify-center">
       <div className="w-full max-w-xs mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -70,12 +94,15 @@ const SignUp = () => {
             placeholder="johndoe@mail.com"
             value={signUpData.email}
             onChange={(e) =>
-              setSignUpData({...signUpData, email: e.target.value})
+              setSignUpData({ ...signUpData, email: e.target.value })
             }
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -85,12 +112,15 @@ const SignUp = () => {
             placeholder="******"
             value={signUpData.password}
             onChange={(e) =>
-              setSignUpData({...signUpData, password: e.target.value})
+              setSignUpData({ ...signUpData, password: e.target.value })
             }
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="confirmPassword"
+          >
             Confirm Password
           </label>
           <input
@@ -100,7 +130,7 @@ const SignUp = () => {
             placeholder="******"
             value={signUpData.confirmPassword}
             onChange={(e) =>
-              setSignUpData({...signUpData, confirmPassword: e.target.value})
+              setSignUpData({ ...signUpData, confirmPassword: e.target.value })
             }
           />
         </div>
@@ -108,12 +138,17 @@ const SignUp = () => {
           <button
             disabled={isLoading}
             onClick={handleSubmit}
-            className={` bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded ${isLoading? "opacity-50 cursor-not-allowed" : ""}`}
+            className={` bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            {isLoading? "Loading..." : "Create Account"}
+            {isLoading ? "Loading..." : "Create Account"}
           </button>
           <a href="/auth/login" className="inline-block align-baseline mt-3 ">
-            Already have an account? <span className="font-bold text-sm cursor-pointer text-blue-500 hover:text-blue-800 underline">Log in</span>
+            Already have an account?{" "}
+            <span className="font-bold text-sm cursor-pointer text-blue-500 hover:text-blue-800 underline">
+              Log in
+            </span>
           </a>
         </div>
         <div className="mt-6 text-center">
@@ -121,7 +156,7 @@ const SignUp = () => {
         </div>
         <div className="mt-6 text-center">
           <span className="inline-block align-baseline font-bold text-sm text-black hover:text-black">
-            Or sign up with
+            Or sign in with
           </span>
           <button
             onClick={handleSignUpWithGoogle}

@@ -1,76 +1,89 @@
-import React, { useState } from 'react';
-import { itemProps } from './page';
-import { FaTrash } from 'react-icons/fa';
+import React, { useState } from "react";
+import { itemProps } from "./page";
+import { FaTrash } from "react-icons/fa";
+import { TodoType } from "../../../../types";
+import { useDispatch, useSelector } from "react-redux";
+import { IRootState } from "@/redux/store";
+import { addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { db, todoCollectionRef } from "@/firebase";
+import { deleteTodo, updateTodo } from "@/redux/todo/todoSlice";
+import { BiSave } from "react-icons/bi";
+import TodoItemCard from "@/components/todoItemCard";
 
-const Todolist = ({ secondTitle, btnText }: any) => {
-  const [title, setTitle] = useState('');
-  const [header, setHeader] = useState(secondTitle || 'Grocery List');
-  const [items, setItems] = useState<itemProps[]>([]);
-
+const Todolist = ({
+  secondTitle,
+  btnText,
+  todoItems,
+}: {
+  secondTitle?: string;
+  btnText?: string;
+  todoItems: TodoType[];
+}) => {
+  const { user } = useSelector((state: IRootState) => state.user);
+  const [newItem, setNewItem] = useState<TodoType[] | null>(null);
+  const [header, setHeader] = useState(secondTitle || "Grocery List");
   const handleHeaderChange = (e: any) => {
     setHeader(e.target.value);
   };
-
-  const addItem = () => {
-    setItems([...items, { id: Date.now(), text: title }]);
-    setTitle('');
-  };
-
-  const deleteItem = (id: any) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
-
-  const saveEdit = (index: any, newText: any) => {
-    const newItems = [...items];
-    newItems[index].text = newText;
-    setItems(newItems);
-  };
+  const filterByHeader = todoItems.filter(
+    (item) => item.headerTitle === header
+  );
   return (
-    <div className='shadow rounded-md bg-slate-50 '>
-      <div className=' w-full py-2 px-4 border-b'>
+    <div className="shadow rounded-md bg-slate-50 ">
+      <div className=" w-full py-2 px-4 border-b">
         <input
-          type='text'
+          type="text"
           value={header}
           onChange={handleHeaderChange}
-          placeholder='Grocery List'
-          className=' w-full outline-none font-bold bg-slate-50 p-2 border border-slate-50 hover:border-black hover:border  hover:border-dashed rounded-md '
+          placeholder="Grocery List"
+          className=" w-full outline-none font-bold bg-slate-50 p-2 border border-slate-50 hover:border-black hover:border  hover:border-dashed rounded-md "
         />
       </div>
-      <div className='flex flex-col'>
-        <ul className='justify-center items-center flex flex-col'>
-          {items.map((item, index) => (
-            <li
-              key={item.id}
-              className='flex gap-2 justify-between items-center border-b border-gray-200 py-2 px-4 group'
-            >
-              <label>
-                <input
-                  type='text'
-                  // value={title}
-                  defaultValue={item.text}
-                  onChange={(e) => saveEdit(index, e.target.value)}
-                  autoFocus
-                  placeholder='Your item here'
-                  className=' w-full outline-none bg-slate-50 p-2 border border-slate-50 group-hover:border-black group-hover:border  group-hover:border-dashed rounded-md'
-                />
-              </label>
-              <button
-                title='delete'
-                type='button'
-                onClick={() => deleteItem(item.id)}
-                className='text-red-500 invisible group-hover:visible p-1.5 rounded-md hover:bg-red-200'
-              >
-                <FaTrash />
-              </button>
-            </li>
+      <div className="flex flex-col">
+        {filterByHeader.map((item, index) => (
+          <TodoItemCard
+            setNewItem={setNewItem}
+            key={index}
+            todoItem={item}
+            headerTitle={header}
+          />
+        ))}
+        {newItem &&
+          newItem.map((item, index) => (
+            <TodoItemCard
+              setNewItem={setNewItem}
+              key={index}
+              todoItem={item}
+              headerTitle={header}
+            />
           ))}
-        </ul>
         <button
-          type='button'
-          onClick={addItem}
-          className='bg-emerald-500 text-white px-4 py-2 rounded'
+          type="button"
+          onClick={() => {
+            if (newItem) {
+              setNewItem([
+                ...newItem,
+                {
+                  id: "",
+                  value: "",
+                  headerTitle: header,
+                  userEmail: user.email,
+                },
+              ]);
+            } else {
+              setNewItem([
+                {
+                  id: "",
+                  value: "",
+                  headerTitle: header,
+                  userEmail: user.email,
+                },
+              ]);
+            }
+          }}
+          className="bg-emerald-500 text-white px-4 py-2 rounded"
         >
-          {btnText || 'Add Item'}
+          {btnText || "Add Item"}
         </button>
       </div>
     </div>

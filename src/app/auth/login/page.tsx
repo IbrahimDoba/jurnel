@@ -28,7 +28,7 @@ const Login = () => {
             profilePicture: res.user.photoURL ?? undefined,
           })
         );
-        router.push("/jurnal/jurnals");
+        router.push("/jurnal");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");
@@ -127,7 +127,7 @@ const Login = () => {
         </div>
         <div className="mt-6 text-center">
           <span className="inline-block align-baseline font-bold text-sm text-black hover:text-black">
-            Or sign up with
+            Or sign in with
           </span>
           <button
             onClick={handleSignUpWithGoogle}

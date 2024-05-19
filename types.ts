@@ -1,6 +1,9 @@
+import ReactQuill from "react-quill";
+
 export type journalType = {
   id?: string;
   userEmail: string;
+  title: string;
   value: string;
   dateCreated: string;
   label?: string;
@@ -11,4 +14,21 @@ export type User = {
   email: string;
   id: string;
   profilePicture?: string;
+};
+
+export type DisplayJournalType = {
+  activeJournal: journalType[];
+  dateCreated: string;
+};
+export type EditorProp = {
+  editorValue: ReactQuill.Value;
+  refId: string;
+  dateCreated: string;
+};
+
+export type TodoType = {
+  userEmail: string;
+  id: string;
+  headerTitle: string;
+  value: string;
 };
