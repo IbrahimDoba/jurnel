@@ -122,6 +122,7 @@ function JournalEntry({
   // AUTO SAVE useEffect
   useEffect(() => {
     handleSave();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedContent]);
 
   return (
