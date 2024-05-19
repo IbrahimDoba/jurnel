@@ -10,9 +10,12 @@ import { CiCircleList } from 'react-icons/ci';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/redux/store';
 
 const Sidebar = () => {
-  const user = null;
+  const { user } = useSelector((state: IRootState) => state.user);
+
   const pathname = usePathname();
 
   return (

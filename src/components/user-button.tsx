@@ -48,13 +48,17 @@ function UserButton({ user }: { user: UserButtonProps }) {
           className="w-8 h-8 rounded-full"
           onClick={() => setPopover(!popover)}
         >
-          <Image
-            src={user.image ? user.image : ""}
-            alt="user"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
+          {user.image ? (
+            <Image
+              src={user.image ? user.image : ""}
+              alt="user"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          ) : (
+            <CgUser className="text-emerald-500" size={30} />
+          )}
         </button>
       </div>
 
