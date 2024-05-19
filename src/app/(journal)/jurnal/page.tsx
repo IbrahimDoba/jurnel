@@ -13,7 +13,6 @@ import { getNextOrPreviousDay, sortJournalsByDate } from "@/utils/helpers";
 import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { DisplayJournalType, EditorProp, journalType } from "../../../../types";
-import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
