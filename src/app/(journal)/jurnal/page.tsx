@@ -9,11 +9,10 @@ import {
   fetchJournals,
   updateJournal,
 } from "@/redux/journal/journalSlice";
-import { getNextOrPreviousDay, sortJournalsByDate } from "@/utils/helpers";
+import { getDateByOperation, sortJournalsByDate } from "@/utils/helpers";
 import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { DisplayJournalType, EditorProp, journalType } from "../../../../types";
-import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
@@ -66,22 +65,17 @@ function Jurnal() {
   const router = useRouter();
   const dispatch = useDispatch();
   const today = moment().format("YYYY-MM-DD");
-  const resetNoRecord = () =>
-    setTimeout(() => {
-      setNoEntryForDate({
-        next: false,
-        previous: false,
-      });
-    }, 3000);
+
   const handleRenderJournalByDate = (operation: "next" | "previous") => {
-    const getActionDate = getNextOrPreviousDay(
+    const getActionDate = getDateByOperation(
+      journals,
       displayJournals.dateCreated,
       operation
     );
-    console.log("TIME CHECKER: ", getActionDate, journals[0].dateCreated);
     const filterJournalsByDate = journals.filter(
       (j) => j.dateCreated === getActionDate
     );
+    console.log("OBJECT CHECKER: ", getActionDate, filterJournalsByDate);
     setDisplayJournals({
       activeJournal: filterJournalsByDate,
       dateCreated: getActionDate,
@@ -106,7 +100,7 @@ function Jurnal() {
     } else {
       router.push("/auth/login");
     }
-  }, [dispatch, user.email, isLogged, router]);
+  }, [dispatch, user.email, isLogged, router, today]);
 
   //BELOW useEffect KEEPS TRACK OF THE JOURNAL STATE CHANGES
   useEffect(() => {

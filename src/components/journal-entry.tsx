@@ -43,7 +43,7 @@ function JournalEntry({
   const [errorMsg, setErrorMsg] = useState("");
   const [journalTitle, setJournalTitle] = useState<string>(title);
   const [editorContent, setEditorContent] = useState<string>(body);
-  const [debouncedContent] = useDebounce(editorContent, 1000);
+
 
   const dispatch = useDispatch();
 
@@ -118,11 +118,7 @@ function JournalEntry({
     setJournalTitle(title);
     setEditorContent(body);
   }, [title, body]);
-
   // AUTO SAVE useEffect
-  useEffect(() => {
-    handleSave();
-  }, [debouncedContent]);
 
   return (
     <div className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
@@ -132,7 +128,9 @@ function JournalEntry({
             <input
               type="text"
               value={journalTitle}
-              onChange={(e) => setJournalTitle(e.target.value)}
+              onChange={(e) => {
+                setJournalTitle(e.target.value);
+              }}
               placeholder="Some nice title..."
               spellCheck={false}
               className="min-w-full text-accent text-lg lg:text-xl font-semibold placeholder:font-light placeholder:text-sm bg-transparent border-none focus:outline-dashed outline-primary rounded-md p-2"
@@ -143,7 +141,7 @@ function JournalEntry({
         {!welcomeEntry && (
           <div className="flex gap-2 items-center">
             {isSaving && <span>Saving...</span>}
-            {/* <button
+            <button
               title="save"
               type="button"
               onClick={handleSave}
@@ -151,7 +149,7 @@ function JournalEntry({
               className="hover:bg-primary rounded-md p-1 h-fit w-fit transition duration-200 hover:text-accent"
             >
               <BiSave size={20} />
-            </button> */}
+            </button>
             <button
               title="delete"
               type="button"

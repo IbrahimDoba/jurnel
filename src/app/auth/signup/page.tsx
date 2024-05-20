@@ -80,6 +80,8 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-emerald-100 flex items-center justify-center">
       <div className="w-full max-w-xs mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <span>{errorMsg}</span>
+
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

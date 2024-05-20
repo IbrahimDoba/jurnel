@@ -23,6 +23,7 @@ const TodoItemCard = ({
   const dispatch = useDispatch();
   const { isLogged, user } = useSelector((state: IRootState) => state.user);
 
+  const [initiateAutoSave, setInitiateAutoSave] = useState(false);
   const [itemValue, setItemValue] = useState(todoItem);
   const [trackValue, setTrackValue] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -90,10 +91,10 @@ const TodoItemCard = ({
 
   // AUTO SAVE useEffect
   useEffect(() => {
-    if (user.email) {
+    if (user.email && initiateAutoSave) {
       handleSave();
     }
-  }, [debouncedContent, user.email]);
+  }, [debouncedContent, user.email, initiateAutoSave]);
   return (
     <ul className="justify-center items-center flex flex-col">
       <li className="flex gap-2 justify-between items-center border-b border-gray-200 py-2 px-4 group">
@@ -105,6 +106,7 @@ const TodoItemCard = ({
             onChange={(e) => {
               setItemValue({ ...itemValue, value: e.target.value });
               setTrackValue(e.target.value);
+              setInitiateAutoSave(true);
             }}
             autoFocus
             placeholder="Your item here"
