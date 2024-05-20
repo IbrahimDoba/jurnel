@@ -11,12 +11,13 @@ import {
 } from "@/redux/journal/journalSlice";
 import { getDateByOperation, sortJournalsByDate } from "@/utils/helpers";
 import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DisplayJournalType, EditorProp, journalType } from "../../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
 import moment from "moment";
+import { nanoid }from 'nanoid'
 
 type NewEntry = {
   id: string;
@@ -50,7 +51,9 @@ function Jurnal() {
     activeJournal: [],
     dateCreated: "",
   });
-  const addEntry = () =>
+  const lastEntryRef = useRef<HTMLDivElement | null>(null);
+
+  const addEntry = () => {
     setEntryForToday([
       {
         id: "",
@@ -59,6 +62,12 @@ function Jurnal() {
         dateCreated: moment().format("YYYY-MM-DD"),
       },
     ]);
+
+    // Scroll to the bottom
+    if (lastEntryRef.current) {
+      lastEntryRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
 
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const { journals } = useSelector((state: IRootState) => state.journal);
@@ -160,7 +169,7 @@ function Jurnal() {
         {displayJournals.activeJournal.length > 0 ? (
           displayJournals.activeJournal.map((entry, index) => (
             <JournalEntry
-              key={index}
+              key={entry.id ?? nanoid()}
               setEntryForToday={setEntryForToday}
               id={entry.id ?? ""}
               title={entry.title}
@@ -169,19 +178,20 @@ function Jurnal() {
             />
           ))
         ) : (
-          <div className="flex flex-col justify-center items-center bg-white relative p-2 h-32 max-w-screen-sm w-full mx-auto  border rounded-md">
+          <li className="flex flex-col justify-center items-center bg-white relative p-2 h-32 max-w-screen-sm w-full mx-auto  border rounded-md">
             <span className="text-emerald-500">No Jurnals To Display</span>
-          </div>
+          </li>
         )}
         {entryForToday &&
           entryForToday.map((entry, index) => (
             <JournalEntry
               setEntryForToday={setEntryForToday}
-              key={index}
+              key={nanoid()}
               id={entry.id ?? ""}
               title={entry.title}
               body={entry.value}
               dateCreated={entry.dateCreated}
+              // ref={index === entryForToday.length - 1 ? lastEntryRef : null}
             />
           ))}
       </ul>

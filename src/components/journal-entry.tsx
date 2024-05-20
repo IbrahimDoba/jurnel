@@ -121,7 +121,7 @@ function JournalEntry({
   // AUTO SAVE useEffect
 
   return (
-    <div className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
+    <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
       <div className="px-4 py-3 grid grid-cols-[1fr_auto] gap-6 border-b border-primary border-dashed">
         <div className="flex flex-col">
           <label className="block">
@@ -165,7 +165,7 @@ function JournalEntry({
         defaultContent={editorContent}
         setEditorContent={setEditorContent}
       />
-    </div>
+    </li>
   );
 }
 
