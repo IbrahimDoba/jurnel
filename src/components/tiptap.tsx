@@ -1,11 +1,11 @@
-"use client";
-import CharacterCount from "@tiptap/extension-character-count";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-
-import Progress from "./progress";
-import Toolbar from "./toolbar";
+'use client';
+import CharacterCount from '@tiptap/extension-character-count';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Progress from './progress';
+import Toolbar from './toolbar';
+import { useEffect } from 'react';
 
 const Tiptap = ({
   setEditorContent,
@@ -17,36 +17,13 @@ const Tiptap = ({
   const limit = 1000;
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        blockquote: {
-          HTMLAttributes: {
-            class: "border-l-4 border-gray-300 pl-2",
-          },
-        },
-        italic: {
-          HTMLAttributes: {
-            class: "italic",
-          },
-        },
-        listItem: {
-          HTMLAttributes: {
-            class: "pl-2",
-          },
-        },
-        heading: {
-          HTMLAttributes: {
-            class: "font-bold text-lg",
-          },
-          levels: [2, 3, 4],
-        },
-        orderedList: { HTMLAttributes: { class: "list-decimal pl-6" } },
-        bulletList: { HTMLAttributes: { class: "list-disc pl-6" } },
-      }),
+      StarterKit.configure({}),
       CharacterCount.configure({
         limit: 1000,
       }),
       Underline,
     ],
+    autofocus: true,
     content: defaultContent,
     editorProps: {
       attributes: {
@@ -60,6 +37,15 @@ const Tiptap = ({
     },
   });
 
+
+  // this is no longer necessary but just to be safe and make sure editor recieves updates
+  useEffect(() => {
+    if (editor) {
+      editor.commands.setContent(defaultContent);
+    }
+  }, [defaultContent, editor]);
+
+
   const percentage = editor
     ? Math.round((100 / limit) * editor.storage.characterCount.characters())
     : 0;
@@ -72,15 +58,7 @@ const Tiptap = ({
     <>
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
-      <input
-        type="text"
-        onChange={(e) => {
-          setEditorContent(e.target.value);
-        }}
-        value={defaultContent}
-      />
       <Progress editor={editor} percentage={percentage} />
-      <span>ITEM DATA: {defaultContent}</span>
     </>
   );
 };
