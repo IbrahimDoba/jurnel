@@ -69,6 +69,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-emerald-100 flex items-center justify-center">
       <div className="w-full max-w-xs mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <span>{errorMsg}</span>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -105,7 +106,9 @@ const Login = () => {
             }
           />
         </div>
-        <div className="flex items-center justify-center"> {/* change to between when forgot password func is available */}
+        <div className="flex items-center justify-center">
+          {" "}
+          {/* change to between when forgot password func is available */}
           <button
             disabled={isLoading}
             onClick={handleSubmit}
@@ -137,7 +140,13 @@ const Login = () => {
           </button>
         </div>
         <p className="mt-4 justify-center items-center flex">
-          Click here to <Link href='/auth/signup' className="underline ml-2 text-blue-800 cursor-pointer">Register</Link>
+          Click here to{" "}
+          <Link
+            href="/auth/signup"
+            className="underline ml-2 text-blue-800 cursor-pointer"
+          >
+            Register
+          </Link>
         </p>
       </div>
     </div>
