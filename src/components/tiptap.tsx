@@ -1,11 +1,11 @@
-'use client';
-import CharacterCount from '@tiptap/extension-character-count';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+"use client";
+import CharacterCount from "@tiptap/extension-character-count";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 
-import Progress from './progress';
-import Toolbar from './toolbar';
+import Progress from "./progress";
+import Toolbar from "./toolbar";
 
 const Tiptap = ({
   setEditorContent,
@@ -15,27 +15,32 @@ const Tiptap = ({
   defaultContent: string;
 }) => {
   const limit = 1000;
-
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         blockquote: {
           HTMLAttributes: {
-            class: 'border-l-4 border-gray-300 pl-2',
+            class: "border-l-4 border-gray-300 pl-2",
           },
         },
         italic: {
           HTMLAttributes: {
-            class: 'italic',
+            class: "italic",
           },
         },
         listItem: {
           HTMLAttributes: {
-            class: 'pl-2',
+            class: "pl-2",
           },
         },
-        orderedList: { HTMLAttributes: { class: 'list-decimal pl-6' } },
-        bulletList: { HTMLAttributes: { class: 'list-disc pl-6' } },
+        heading: {
+          HTMLAttributes: {
+            class: "font-bold text-lg",
+          },
+          levels: [2, 3, 4],
+        },
+        orderedList: { HTMLAttributes: { class: "list-decimal pl-6" } },
+        bulletList: { HTMLAttributes: { class: "list-disc pl-6" } },
       }),
       CharacterCount.configure({
         limit: 1000,
@@ -67,7 +72,15 @@ const Tiptap = ({
     <>
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
+      <input
+        type="text"
+        onChange={(e) => {
+          setEditorContent(e.target.value);
+        }}
+        value={defaultContent}
+      />
       <Progress editor={editor} percentage={percentage} />
+      <span>ITEM DATA: {defaultContent}</span>
     </>
   );
 };

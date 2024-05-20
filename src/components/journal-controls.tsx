@@ -1,4 +1,4 @@
-import { checkIsTodayOrYesterday, getPreviousDayString } from "@/utils/helpers";
+import { checkIsTodayOrYesterday } from "@/utils/helpers";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 function JournalControls({
