@@ -50,7 +50,7 @@ const Tiptap = ({
     content: defaultContent,
     editorProps: {
       attributes: {
-        class: "prose p-6 focus:outline-none",
+        class: 'prose prose-stone p-6 focus:outline-none',
       },
     },
     onUpdate({ editor }) {

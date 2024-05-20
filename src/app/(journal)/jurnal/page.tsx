@@ -169,8 +169,8 @@ function Jurnal() {
             />
           ))
         ) : (
-          <div className="flex flex-col justify-center items-center bg-white relative p-2 h-44 w-[70%]  border-t rounded-b-md">
-            <span>No records here</span>
+          <div className="flex flex-col justify-center items-center bg-white relative p-2 h-32 max-w-screen-sm w-full mx-auto  border rounded-md">
+            <span className="text-emerald-500">No Jurnals To Display</span>
           </div>
         )}
         {entryForToday &&
