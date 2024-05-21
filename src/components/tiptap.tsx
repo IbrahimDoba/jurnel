@@ -39,11 +39,11 @@ const Tiptap = ({
 
 
   // this is no longer necessary but just to be safe and make sure editor recieves updates
-  useEffect(() => {
-    if (editor) {
-      editor.commands.setContent(defaultContent);
-    }
-  }, [defaultContent, editor]);
+  // useEffect(() => {
+  //   if (editor) {
+  //     editor.commands.setContent(defaultContent);
+  //   }
+  // }, [defaultContent, editor]);
 
 
   const percentage = editor
