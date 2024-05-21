@@ -29,7 +29,7 @@ const Todolist = ({
     (item) => item.headerTitle === header
   );
   return (
-    <div className="shadow rounded-md bg-slate-50 ">
+    <div className="shadow rounded-md bg-slate-50 h-fit">
       <div className=" w-full py-2 px-4 border-b">
         <input
           type="text"

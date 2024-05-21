@@ -1,6 +1,8 @@
 import Sidebar from '@/components/sidebar';
 import React from 'react';
 import type { Metadata } from 'next';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: 'Journal',
@@ -9,6 +11,7 @@ export const metadata: Metadata = {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
+      <ToastContainer />
       <main className='min-h-screen relative grid grid-cols-[auto_1fr]'>
         <Sidebar />
         <div className='min-h-[calc(100vh-60px)]'>{children}</div>
