@@ -1,4 +1,3 @@
-import ReactQuill from "react-quill";
 
 export type journalType = {
   id?: string;
@@ -18,11 +17,6 @@ export type User = {
 
 export type DisplayJournalType = {
   activeJournal: journalType[];
-  dateCreated: string;
-};
-export type EditorProp = {
-  editorValue: ReactQuill.Value;
-  refId: string;
   dateCreated: string;
 };
 
