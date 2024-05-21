@@ -12,7 +12,7 @@ import {
 import { getDateByOperation, sortJournalsByDate } from "@/utils/helpers";
 import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
-import { DisplayJournalType, EditorProp, journalType } from "../../../../types";
+import { DisplayJournalType, journalType } from "../../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
