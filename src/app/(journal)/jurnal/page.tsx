@@ -58,7 +58,7 @@ function Jurnal() {
       {
         id: "",
         title: "Welcome to Jurnal by Wordgen 🎉",
-        value: "<p>Hello World</p>",
+        value: "<p>Dear Jurnal.</p>",
         dateCreated: moment().format("YYYY-MM-DD"),
       },
     ]);

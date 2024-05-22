@@ -16,6 +16,11 @@ const config: Config = {
         error: 'hsl(354 84% 57%)',
         main: 'hsl(157, 68%, 96%)',
       },
+      screens: {
+        'max-lg': { max: '1000px' },
+        'max-md': { max: '680px' },
+        md: '681px',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],
