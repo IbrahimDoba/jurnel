@@ -26,6 +26,13 @@ export default function Page() {
             Jurnal
             <BsArrowRight aria-hidden='true' />
           </Link>
+          <Link
+            href='/aboutus'
+            className='w-fit p-2 flex items-center justify-center font-semibold rounded-full gap-2 border-2 border-accent hover:bg-primary outline-none min-w-[8rem] focus-visible:gap-4 focus-visible:bg-main/10 transition-all duration-300'
+          >
+            Learn about us
+            <BsArrowRight aria-hidden='true' />
+          </Link>
         </div>
       </div>
       <div className='max-md:row-[1]'>

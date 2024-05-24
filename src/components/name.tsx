@@ -46,7 +46,7 @@ function Name() {
           onClick={generateName}
           className="focus:outline-none text-white bg-accent hover:bg-emerald-600  font-medium rounded-lg text-xs px-5 py-2 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 "
         >
-          Another Quote!
+          Another Name!
         </button>
       </div>
     </div>

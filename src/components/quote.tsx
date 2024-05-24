@@ -22,7 +22,7 @@ function Quote() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 max-lg:m-4">
       <section className="max-h-24 h-24 flex flex-auto justify-center mt-24 ">
         <div className="container flex justify-center flex-col items-center align-middle ">
           {isLoading ? (

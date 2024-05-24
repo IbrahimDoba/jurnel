@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
             <Link href='/quotes' className={`${pathname === '/quotes' ? 'bg-accent text-white' : ''} hover:bg-accent hover:text-white transition duration-300 rounded-full px-2 py-0.5`}>Quotes</Link>
           </li>
           <li>
-            <Link href='/jurnal' className={`${pathname === '/jurnal' ? 'bg-accent text-white' : ''} hover:bg-accent hover:text-white transition duration-300 rounded-full px-2 py-0.5`}>Jurnal</Link>
+            <Link href='/journal' className={`${pathname === '/journal' ? 'bg-accent text-white' : ''} hover:bg-accent hover:text-white transition duration-300 rounded-full px-2 py-0.5`}>Journal</Link>
           </li>
         </ul>
       </header>
