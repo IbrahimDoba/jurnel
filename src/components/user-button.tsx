@@ -1,6 +1,7 @@
 "use client";
 import { logout } from "@/redux/auth/authSlice";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { CgUser } from "react-icons/cg";
@@ -74,7 +75,8 @@ function UserButton({ user }: { user: UserButtonProps }) {
           <CgUser size={18} />
           <div className="flex flex-col">
             <p>{user.name}</p>
-            <p className="text-sm">{user.email}</p>
+            <Link href="/profile">Profile</Link>
+            {/* <p className="text-sm">{user.email}</p> */}
           </div>
         </div>
         <button

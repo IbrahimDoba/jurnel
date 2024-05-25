@@ -39,8 +39,8 @@ const Sidebar = () => {
           {/* main nav */}
           <ul className='flex flex-col gap-4 min-w-full py-4'>
             <SidebarLink
-              path='/jurnal'
-              text='jurnals'
+              path='/journal'
+              text='journal'
               icon={<BsJournals size={20} />}
             />
             <SidebarLink
