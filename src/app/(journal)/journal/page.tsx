@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
 import moment from "moment";
-import { nanoid }from 'nanoid'
+import { nanoid } from "nanoid";
 
 type NewEntry = {
   id: string;
@@ -47,6 +47,7 @@ function Jurnal() {
   });
   const [entryForToday, setEntryForToday] = useState<NewEntry[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [trackDate, setTrackDate] = useState("");
   const [displayJournals, setDisplayJournals] = useState<DisplayJournalType>({
     activeJournal: [],
     dateCreated: "",
@@ -67,7 +68,7 @@ function Jurnal() {
     if (lastEntryRef.current) {
       lastEntryRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }
+  };
 
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const { journals } = useSelector((state: IRootState) => state.journal);
@@ -76,19 +77,30 @@ function Jurnal() {
   const today = moment().format("YYYY-MM-DD");
 
   const handleRenderJournalByDate = (operation: "next" | "previous") => {
-    const getActionDate = getDateByOperation(
-      journals,
-      displayJournals.dateCreated,
-      operation
-    );
+    const { dateValue, isNextAvailable, isPreviousAvailable } =
+      getDateByOperation(journals, displayJournals.dateCreated, operation);
+    console.log("DATE VALUE PRETURNED: ", dateValue);
+
+    setNoEntryForDate({
+      next: !isNextAvailable,
+      previous: !isPreviousAvailable,
+    });
     const filterJournalsByDate = journals.filter(
-      (j) => j.dateCreated === getActionDate
+      (j) => j.dateCreated === dateValue
     );
-    console.log("OBJECT CHECKER: ", getActionDate, filterJournalsByDate);
     setDisplayJournals({
       activeJournal: filterJournalsByDate,
-      dateCreated: getActionDate,
+      dateCreated: dateValue,
     });
+    setTrackDate(dateValue);
+  };
+
+  const handleCreateJournal = () => {
+    setDisplayJournals({
+      activeJournal: [],
+      dateCreated: today,
+    });
+    setTrackDate(today);
   };
   useEffect(() => {
     if (isLogged && user.email) {
@@ -114,34 +126,56 @@ function Jurnal() {
   //BELOW useEffect KEEPS TRACK OF THE JOURNAL STATE CHANGES
   useEffect(() => {
     const checkTodayAvailable = journals.filter((j) => j.dateCreated === today);
+    if (trackDate !== "") {
+      const persistDisplay = journals.filter(
+        (j) => j.dateCreated === trackDate
+      );
+      setDisplayJournals({
+        activeJournal: persistDisplay,
+        dateCreated: trackDate,
+      });
+      return;
+    }
+
     if (journals.length > 0) {
       setDisplayJournals({
         activeJournal: journals.filter((j) => j.dateCreated === today),
         dateCreated:
           checkTodayAvailable.length !== 0 ? journals[0].dateCreated : today, // initial journals will be first one in teh list, so it makes sense to display it's date, but if it is for yesterday, display Today as the date and nothing as the list of journals
       });
+      setTrackDate(
+        checkTodayAvailable.length !== 0 ? journals[0].dateCreated : today
+      );
     } else {
       setDisplayJournals({
         activeJournal: [],
         dateCreated: today,
       });
     }
-  }, [journals, today]);
+    setTrackDate(today);
+  }, [journals, today, trackDate]);
 
   // THIS USEEFFECT PREVENTS USER FROM TRYING TO CHECK JOURNALS FOR TOMORROW
   useEffect(() => {
-    if (displayJournals.dateCreated === today) {
+    if (displayJournals.dateCreated === today && journals.length !== 0) {
+      const { isNextAvailable, isPreviousAvailable } = getDateByOperation(
+        journals,
+        displayJournals.dateCreated,
+        "previous"
+      );
+
+      setNoEntryForDate({
+        next: !isNextAvailable,
+        previous: !isPreviousAvailable,
+      });
+    } else if (journals.length === 0) {
       setNoEntryForDate({
         next: true,
-        previous: false,
-      });
-    } else {
-      setNoEntryForDate({
-        next: false,
-        previous: false,
+        previous: true,
       });
     }
-  }, [displayJournals, today]);
+  }, [displayJournals, today, journals]);
+
   return (
     <section className="grid gap-4 lg:grid-cols-[auto_1fr] items-start w-full h-full py-10">
       <div className="lg:sticky top-10 h-20 w-full px-6 rounded-md flex items-center justify-center">
@@ -166,18 +200,16 @@ function Jurnal() {
             />
           )}
         {/* entry list */}
-        {
-          displayJournals.activeJournal.map((entry, index) => (
-            <JournalEntry
-              key={entry.id ?? nanoid()}
-              setEntryForToday={setEntryForToday}
-              id={entry.id ?? ""}
-              title={entry.title}
-              body={entry.value}
-              dateCreated={entry.dateCreated}
-            />
-          ))
-        }
+        {displayJournals.activeJournal.map((entry, index) => (
+          <JournalEntry
+            key={entry.id ?? nanoid()}
+            setEntryForToday={setEntryForToday}
+            id={entry.id ?? ""}
+            title={entry.title}
+            body={entry.value}
+            dateCreated={entry.dateCreated}
+          />
+        ))}
         {entryForToday &&
           entryForToday.map((entry, index) => (
             <JournalEntry
@@ -192,7 +224,10 @@ function Jurnal() {
           ))}
       </ul>
       {/* New entry button */}
-      <AddNew addNewEntry={addEntry} />
+      <AddNew
+        handleCreateJournal={handleCreateJournal}
+        addNewEntry={addEntry}
+      />
     </section>
   );
 }

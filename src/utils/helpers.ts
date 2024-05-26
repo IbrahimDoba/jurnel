@@ -51,23 +51,100 @@ export function getDateByOperation(
     (item) => item.dateCreated === currentDate
   );
   const secondSplit = [...currentOrderData]; // if we split in the next line below this will be reduces to what is left
-  const firstSplit = secondSplit.slice(0, currentDateIndex); // here we dey get all d array items before the current object date
-  console.log("SPLIT ONE: ", firstSplit, "SPLIT 2: ", secondSplit);
+  console.log("DATE PASSED: ", currentDate, "second split: ", secondSplit);
+  if (currentDateIndex > -1) {
+    const firstSplit = secondSplit.slice(0, currentDateIndex); // here we dey get all d array items before the current object date
 
-  // NOW IF THE OPERATION IS TO GO TO A PREVIOUS DATE, WE WORK WITH THE FIRST SPLIT AND VICE VERSA
-  if (time === "previous") {
-    const findNearestPreviousDate = firstSplit // THIS WILL GET THE FIRST ITEM THAT IS BEFORE THE CURRENT DATE, SO LING AS THE ARRAY IS SORTED THIS SHOULD WORK
-      .reverse()
-      .find((item) =>
-        moment(item.dateCreated, "YYYY-MM-DD").isBefore(formattedCurrentDate)
+    // NOW IF THE OPERATION IS TO GO TO A PREVIOUS DATE, WE WORK WITH THE FIRST SPLIT AND VICE VERSA
+    if (time === "previous") {
+      const findNearestPreviousDate = firstSplit // THIS WILL GET THE FIRST ITEM THAT IS BEFORE THE CURRENT DATE, SO LING AS THE ARRAY IS SORTED THIS SHOULD WORK
+        .reverse()
+        .find((item) =>
+          moment(item.dateCreated, "YYYY-MM-DD").isBefore(formattedCurrentDate)
+        );
+      const checkIfPreviousAvailable = _data.find((item) =>
+        moment(item.dateCreated, "YYYY-MM-DD").isBefore(
+          moment(findNearestPreviousDate?.dateCreated, "YYYY-MM-DD")
+        )
       );
-    return findNearestPreviousDate
-      ? findNearestPreviousDate.dateCreated
-      : currentDate;
+      const checkIfNextAvailable = _data.find((item) =>
+        moment(item.dateCreated, "YYYY-MM-DD").isAfter(
+          moment(findNearestPreviousDate?.dateCreated, "YYYY-MM-DD")
+        )
+      );
+      console.log(
+        "PREV: ",
+        checkIfPreviousAvailable?.dateCreated,
+        "NEXT: ",
+        checkIfNextAvailable?.dateCreated,
+        "ACTUAL DATE: ",
+        findNearestPreviousDate?.dateCreated
+      );
+      return {
+        dateValue: findNearestPreviousDate
+          ? findNearestPreviousDate.dateCreated
+          : currentDate,
+        isPreviousAvailable: checkIfPreviousAvailable ? true : false,
+        isNextAvailable: checkIfNextAvailable ? true : false,
+      };
+    } else {
+      const findNearestNextDate = secondSplit.find((item) =>
+        moment(item.dateCreated, "YYYY-MM-DD").isAfter(formattedCurrentDate)
+      ); // no need to reverse this array cus we are looping forward
+      const checkIfPreviousAvailable = _data.find((item) =>
+        moment(item.dateCreated, "YYYY-MM-DD").isBefore(
+          moment(findNearestNextDate?.dateCreated, "YYYY-MM-DD")
+        )
+      );
+      const checkIfNextAvailable = _data.find((item) =>
+        moment(item.dateCreated, "YYYY-MM-DD").isAfter(
+          moment(findNearestNextDate?.dateCreated, "YYYY-MM-DD")
+        )
+      );
+      console.log(
+        "PREV: ",
+        checkIfPreviousAvailable?.dateCreated,
+        "NEXT: ",
+        checkIfNextAvailable?.dateCreated,
+        "ACTUAL DATE: ",
+        findNearestNextDate?.dateCreated
+      );
+      return {
+        dateValue: findNearestNextDate
+          ? findNearestNextDate.dateCreated
+          : currentDate,
+        isPreviousAvailable: checkIfPreviousAvailable ? true : false,
+        isNextAvailable: checkIfNextAvailable ? true : false,
+      };
+    }
   } else {
-    const findNearestNextDate = secondSplit.find((item) =>
-      moment(item.dateCreated, "YYYY-MM-DD").isAfter(formattedCurrentDate)
-    ); // no need to reverse this array cus we are looping forward
-    return findNearestNextDate ? findNearestNextDate.dateCreated : currentDate;
+    const findNearestNextDate = _data.find((item) =>
+      moment(item.dateCreated, "YYYY-MM-DD").isBefore(formattedCurrentDate)
+    );
+    const checkIfPreviousAvailable = _data.find((item) =>
+      moment(item.dateCreated, "YYYY-MM-DD").isBefore(
+        moment(findNearestNextDate?.dateCreated, "YYYY-MM-DD")
+      )
+    );
+    const checkIfNextAvailable = _data.find((item) =>
+      moment(item.dateCreated, "YYYY-MM-DD").isAfter(
+        moment(findNearestNextDate?.dateCreated, "YYYY-MM-DD")
+      )
+    );
+    console.log(
+      "PREV: ",
+      checkIfPreviousAvailable?.dateCreated,
+      "NEXT: ",
+      checkIfNextAvailable?.dateCreated,
+      "ACTUAL DATE: ",
+      findNearestNextDate?.dateCreated
+    );
+    return {
+      dateValue: findNearestNextDate
+        ? findNearestNextDate.dateCreated
+        : currentDate,
+      isPreviousAvailable: checkIfPreviousAvailable ? true : false,
+      isNextAvailable: checkIfNextAvailable ? true : false,
+    };
   }
 }

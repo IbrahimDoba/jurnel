@@ -1,13 +1,21 @@
-'use client';
-import React from 'react';
-import { MdOutlineAdd } from 'react-icons/md';
+"use client";
+import moment from "moment";
+import React from "react";
+import { MdOutlineAdd } from "react-icons/md";
 
-function AddNew({ addNewEntry }: { addNewEntry: () => void }) {
+function AddNew({
+  addNewEntry,
+  handleCreateJournal,
+}: {
+  addNewEntry: () => void;
+  handleCreateJournal: () => void;
+}) {
+  const today = moment().format("YYYY-MM-DD");
   return (
-    <div className='relative group'>
+    <div className="relative group" onClick={handleCreateJournal}>
       <button
-        type='button'
-        title='new'
+        type="button"
+        title="new"
         className={`z-50 flex items-center justify-center fixed w-12 h-12 bottom-10 right-10 p-2 rounded-full shadow-md text-white bg-accent border border-dashed border-main focus-visible:outline-accent focus-visible:outline-2 outline-offset-2 outline-dotted transition duration-500`}
         onClick={addNewEntry}
       >
