@@ -30,7 +30,7 @@ const Login = () => {
             profilePicture: res.user.photoURL ?? undefined,
           })
         );
-        router.push("/jurnal");
+        router.push("/journal");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");
