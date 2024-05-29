@@ -1,4 +1,3 @@
-
 export type journalType = {
   id?: string;
   userEmail: string;
@@ -20,11 +19,24 @@ export type DisplayJournalType = {
   dateCreated: string;
 };
 
-export type TodoType = {
+export type TodoItemType = {
+  userEmail: string;
+  categoryId: string;
+  id: string;
+  value: string;
+};
+
+export type BackendTodoType = {
   userEmail: string;
   id: string;
   headerTitle: string;
-  value: string;
+};
+
+export type TodoType = {
+  userEmail: string;
+  id: string;
+  todoItems: TodoItemType[];
+  headerTitle: string;
 };
 
 // [

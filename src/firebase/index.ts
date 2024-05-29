@@ -18,6 +18,7 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const journalCollectionRef = collection(db, "journal");
 export const todoCollectionRef = collection(db, "todo");
+export const todoItemsCollectionRef = collection(db, "todoItem");
 
 // AUTH
 export const auth = getAuth(app);
