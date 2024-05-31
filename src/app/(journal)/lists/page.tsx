@@ -1,13 +1,13 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Todolist from "./Todolist";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "@/redux/store";
-import { todoCollectionRef, todoItemsCollectionRef } from "@/firebase";
-import { getDocs } from "firebase/firestore";
-import { BackendTodoType, TodoItemType, TodoType } from "../../../../types";
-import { fetchTodos } from "@/redux/todo/todoSlice";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Todolist from './Todolist';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '@/redux/store';
+import { todoCollectionRef, todoItemsCollectionRef } from '@/firebase';
+import { getDocs } from 'firebase/firestore';
+import { BackendTodoType, TodoItemType, TodoType } from '../../../../types';
+import { fetchTodos } from '@/redux/todo/todoSlice';
+import { useRouter } from 'next/navigation';
 
 export interface itemProps {
   id: number;
@@ -20,10 +20,10 @@ const ListPage = () => {
   const [newCategory, setNewCategory] = useState<TodoType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const secondTitle = "Positive Affirmations";
-  const btnText = "Add Affirmation";
+  const secondTitle = 'Positive Affirmations';
+  const btnText = 'Add Affirmation';
   const dispatch = useDispatch();
-  console.log("TRACKING TODOS: ", todos);
+  console.log('TRACKING TODOS: ', todos);
   useEffect(() => {
     if (isLogged && user.email) {
       (async () => {
@@ -58,14 +58,29 @@ const ListPage = () => {
         setIsLoading(false);
       })();
     } else {
-      router.push("/auth/login");
+      router.push('/auth/login');
     }
   }, [dispatch, user.email, isLogged, router]);
-  console.log("TRACK MAIN TODO_: ", todos);
+  console.log('TRACK MAIN TODO_: ', todos);
   return (
     // create for how are you feeling today / grocery list / postivie affirmation
-    <div className="flex w-full justify-center items-center">
-      <div className="transperant flex relative pt-16 flex-wrap justify-between items-around  min-w-[800px] mt-[25px] mx-[24px]  rounded-xl  ">
+    <div className='w-full h-full max-w-screen-xl p-8 space-y-6 lg:space-y-10'>
+      <button
+        className='p-2 px-4 bg-accent text-white rounded-md ml-auto w-fit'
+        onClick={() =>
+          setNewCategory({
+            userEmail: user.email,
+            id: '',
+            todoItems: [],
+            headerTitle: '',
+          })
+        }
+      >
+        New Category
+      </button>
+
+      {/* todo grid */}
+      <ul className='grid grid-cols-[repeat(auto-fill,_minmax(19rem,_1fr))] gap-8 md:gap-12 lg:gap-16 justify-center'>
         {todos.map((todo) => (
           <Todolist headerId={todo.id} key={todo.id} todoItems={todo} />
         ))}
@@ -74,28 +89,17 @@ const ListPage = () => {
           <Todolist
             todoItems={newCategory}
             setNewCategory={setNewCategory}
-            headerPlaceHolder="New Category"
+            headerPlaceHolder='New Category'
           />
         )}
+      </ul>
 
-        {!newCategory && todos.length === 0 && (
+      {/* empty entries notification */}
+      {!newCategory && todos.length === 0 && (
+        <div className='w-full h-full grid place-content-center'>
           <span>You haven&apos;t created any Todos</span>
-        )}
-
-        <button
-          className="p-1 px-4 bg-accent text-white rounded-md absolute top-0 right-0"
-          onClick={() =>
-            setNewCategory({
-              userEmail: user.email,
-              id: "",
-              todoItems: [],
-              headerTitle: "",
-            })
-          }
-        >
-          New Category
-        </button>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
