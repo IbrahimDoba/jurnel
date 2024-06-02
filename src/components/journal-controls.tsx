@@ -14,8 +14,7 @@ function JournalControls({
     previous: boolean;
   };
 }) {
-  const isToday = moment().format("YYYY-MM-DD") === dateCreated
-  console.log("IS TODAY: ", isToday)
+  const isToday = moment().format("YYYY-MM-DD") === dateCreated;
   return (
     <div className="lg:fixed top-10 left-40 flex flex-col gap-1">
       <div className="flex gap-2 justify-center items-center">

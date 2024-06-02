@@ -34,6 +34,7 @@ const Todolist = ({
   const [newItem, setNewItem] = useState<TodoItemType[] | null>(
     todoItems.todoItems
   );
+  const [disableAddNew, setDisableAddNew] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [headerTitle, setHeaderTitle] = useState(todoItems.headerTitle);
   const [trackValue, setTrackValue] = useState("");
@@ -42,7 +43,9 @@ const Todolist = ({
   const handleHeaderChange = (e: any) => {
     setHeaderTitle(e.target.value);
   };
-
+  const handleDisableAddNew = (val: boolean) => {
+    setDisableAddNew(val);
+  };
   const handleSave = async () => {
     if (!isLogged) {
       return toast("Login required to save journal", {
@@ -52,6 +55,7 @@ const Todolist = ({
     if (!headerId) {
       // IF THERE UIS NO ID, IT'S A NEW ENTRY
       setIsSaving(true);
+      setDisableAddNew(true);
       await addDoc(todoCollectionRef, {
         userEmail: user.email,
         headerTitle,
@@ -65,6 +69,7 @@ const Todolist = ({
               todoItems: [],
             })
           );
+          setDisableAddNew(false);
           setNewCategory ? setNewCategory(null) : null;
           toast("Saved", {
             type: "success",
@@ -80,6 +85,7 @@ const Todolist = ({
       const docRef = doc(db, "todo", headerId);
 
       setIsSaving(true);
+      setDisableAddNew(true);
       await setDoc(docRef, {
         userEmail: user.email,
         headerTitle,
@@ -92,6 +98,7 @@ const Todolist = ({
               headerTitle,
             })
           );
+          setDisableAddNew(false);
         })
         .catch(() => {
           toast("Something went wrong", {
@@ -126,7 +133,7 @@ const Todolist = ({
   // TRACK GLOBAL STATE UPDATE
   useEffect(() => {
     setNewItem(todoItems.todoItems);
-    console.log(todoItems.todoItems)
+    // console.log("TODO ITEMS: ", todoItems.todoItems);
   }, [todoItems.todoItems]);
   return (
     <div className="shadow rounded-md bg-slate-50 h-fit">
@@ -166,6 +173,7 @@ const Todolist = ({
         {newItem &&
           newItem.map((item, index) => (
             <TodoItemCard
+              handleDisableAddNew={handleDisableAddNew}
               setNewItem={setNewItem}
               key={index}
               todoItem={item}
@@ -198,7 +206,10 @@ const Todolist = ({
                 ]);
               }
             }}
-            className="bg-emerald-500 text-white px-4 py-2 rounded"
+            className={`${
+              disableAddNew ? "bg-emerald-200" : "bg-emerald-500"
+            } text-white px-4 py-2 rounded`}
+            disabled={disableAddNew}
           >
             Add Item
           </button>

@@ -20,10 +20,8 @@ const ListPage = () => {
   const [newCategory, setNewCategory] = useState<TodoType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const secondTitle = "Positive Affirmations";
-  const btnText = "Add Affirmation";
   const dispatch = useDispatch();
-  console.log("TRACKING TODOS: ", todos);
+  console.log("checking todos: ", todos);
   useEffect(() => {
     if (isLogged && user.email) {
       (async () => {

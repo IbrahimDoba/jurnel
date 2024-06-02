@@ -21,11 +21,13 @@ const TodoItemCard = ({
   headerTitle,
   setNewItem,
   categoryId,
+  handleDisableAddNew,
 }: {
   todoItem: TodoItemType;
   headerTitle: string;
   categoryId?: string;
   setNewItem: any;
+  handleDisableAddNew: (val: boolean) => void;
 }) => {
   const dispatch = useDispatch();
   const { isLogged, user } = useSelector((state: IRootState) => state.user);
@@ -48,6 +50,7 @@ const TodoItemCard = ({
       // IF THERE UIS NO ID, IT'S A NEW ENTRY
       setErrorMsg("");
       setIsSaving(true);
+      handleDisableAddNew(true);
       await addDoc(todoItemsCollectionRef, {
         userEmail: user.email,
         categoryId,
@@ -65,6 +68,7 @@ const TodoItemCard = ({
               },
             })
           );
+          handleDisableAddNew(false);
           setNewItem(null);
           toast("Saved", {
             type: "success",
@@ -82,6 +86,7 @@ const TodoItemCard = ({
       const docRef = doc(db, "todoItem", todoItem.id);
 
       setIsSaving(true);
+      handleDisableAddNew(true);
       await setDoc(docRef, {
         userEmail: user.email,
         categoryId: categoryId,
@@ -92,9 +97,15 @@ const TodoItemCard = ({
             updateTodoItem({
               categoryId: categoryId ?? "",
               todoId: todoItem.id,
-              itemData: todoItem,
+              itemData: {
+                userEmail: user.email,
+                value: itemValue.value,
+                id: todoItem.id,
+                categoryId: todoItem.categoryId,
+              },
             })
           );
+          handleDisableAddNew(false);
         })
         .catch(() => {
           setErrorMsg("Something went wrong");

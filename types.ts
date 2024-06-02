@@ -39,21 +39,4 @@ export type TodoType = {
   headerTitle: string;
 };
 
-// [
-//   {
-//     dateCreated: "2024-5-18",
-//     name: "Kolo",
-//   },
-//   {
-//     dateCreated: "2024-5-18",
-//     name: "Kolo",
-//   },
-//   {
-//     dateCreated: "2024-5-14",
-//     name: "Kolo",
-//   },
-//   {
-//     dateCreated: "2024-5-14",
-//     name: "Dave",
-//   },
-// ];
+export type SubscriptionType = "free" | "pro" | "unlimited";
