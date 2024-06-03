@@ -9,7 +9,7 @@ import { BiSave } from "react-icons/bi";
 import { LuTrash } from "react-icons/lu";
 import Tiptap from "./tiptap";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
-
+import parse from "html-react-parser";
 import {
   addJournal,
   deleteJournal,
@@ -17,6 +17,8 @@ import {
 } from "@/redux/journal/journalSlice";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { checkMaxWords, getText, sumArray } from "@/utils/helpers";
+import PremiumModal from "./premiumModal";
 
 interface Entry {
   id: string;
@@ -40,16 +42,23 @@ function JournalEntry({
   setEntryForToday: any;
 }) {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
+  const [isLimitExeeded, setLimitExeeded] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [journalTitle, setJournalTitle] = useState<string>(title);
   const [editorContent, setEditorContent] = useState<string>(body);
   const [initiateAutoSave, setInitiateAutoSave] = useState(false);
+  const [limitModal, setLimitModal] = useState(false);
   const [debounceEditorContent] = useDebounce(editorContent, 1500);
   const [debounceTitle] = useDebounce(journalTitle, 1500);
-
+  const { journals } = useSelector((state: IRootState) => state.journal);
+  const { subscription } = useSelector(
+    (state: IRootState) => state.subscription
+  );
   const dispatch = useDispatch();
-
+  const handleCloseLimitModal = () => {
+    setLimitModal(!limitModal);
+  };
   const handleDelete = async () => {
     if (id) {
       const journalToDelete = doc(db, "journal", id);
@@ -139,8 +148,28 @@ function JournalEntry({
       handleSave();
     }
   }, [debounceEditorContent, user.email, initiateAutoSave, debounceTitle]);
+
+  // THIS HANDLES THE WORD COUNT BASED ON USER SUB
+  useEffect(() => {
+    const today = moment().format("YYYY-MM-DD");
+    const findAllTodaysJournals = journals
+      .filter((j) => j.dateCreated === today)
+      .map((eachTodays) => getText(eachTodays.value).length);
+    const sumAllTodayEntries = sumArray(findAllTodaysJournals);
+    console.log("SUM: ", sumAllTodayEntries);
+    const checkLimit = checkMaxWords(subscription, sumAllTodayEntries);
+    if (checkLimit) {
+      setLimitExeeded(true);
+      setLimitModal(true);
+    }
+  }, [journals, subscription]);
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
+      <span className="text-red-500 font-bold">
+        {isLimitExeeded
+          ? "You have reached your maximum limit. Please upgrade your account"
+          : ""}
+      </span>
       <div className="px-4 py-3 grid grid-cols-[1fr_auto] gap-6 border-b border-primary border-dashed">
         <div className="flex flex-col">
           <label className="block">
@@ -182,10 +211,12 @@ function JournalEntry({
         )}
       </div>
       <Tiptap
+        isLimitExceeded={isLimitExeeded}
         setInitiateAutoSave={setInitiateAutoSave}
         defaultContent={editorContent}
         setEditorContent={setEditorContent}
       />
+      <PremiumModal isOpen={limitModal} onClose={handleCloseLimitModal} />
     </li>
   );
 }

@@ -1,5 +1,5 @@
 import moment from "moment";
-import { journalType } from "../../types";
+import { SubscriptionType, journalType } from "../../types";
 
 export const getNextOrPreviousDay = (
   dateString: string,
@@ -8,7 +8,7 @@ export const getNextOrPreviousDay = (
   const date = moment(dateString, "YYYY-MM-DD");
   const newDate =
     operation === "next" ? date.add(1, "days") : date.subtract(1, "days");
-  console.log("NEW DATE: ", newDate.format("YYYY-MM-DD"));
+  // console.log("NEW DATE: ", newDate.format("YYYY-MM-DD"));
   return newDate.format("YYYY-MM-DD");
 };
 
@@ -51,7 +51,7 @@ export function getDateByOperation(
     (item) => item.dateCreated === currentDate
   );
   const secondSplit = [...currentOrderData]; // if we split in the next line below this will be reduces to what is left
-  console.log("DATE PASSED: ", currentDate, "second split: ", secondSplit);
+  // console.log("DATE PASSED: ", currentDate, "second split: ", secondSplit);
   if (currentDateIndex > -1) {
     const firstSplit = secondSplit.slice(0, currentDateIndex); // here we dey get all d array items before the current object date
 
@@ -72,14 +72,14 @@ export function getDateByOperation(
           moment(findNearestPreviousDate?.dateCreated, "YYYY-MM-DD")
         )
       );
-      console.log(
-        "PREV: ",
-        checkIfPreviousAvailable?.dateCreated,
-        "NEXT: ",
-        checkIfNextAvailable?.dateCreated,
-        "ACTUAL DATE: ",
-        findNearestPreviousDate?.dateCreated
-      );
+      // console.log(
+      //   "PREV: ",
+      //   checkIfPreviousAvailable?.dateCreated,
+      //   "NEXT: ",
+      //   checkIfNextAvailable?.dateCreated,
+      //   "ACTUAL DATE: ",
+      //   findNearestPreviousDate?.dateCreated
+      // );
       return {
         dateValue: findNearestPreviousDate
           ? findNearestPreviousDate.dateCreated
@@ -101,14 +101,14 @@ export function getDateByOperation(
           moment(findNearestNextDate?.dateCreated, "YYYY-MM-DD")
         )
       );
-      console.log(
-        "PREV: ",
-        checkIfPreviousAvailable?.dateCreated,
-        "NEXT: ",
-        checkIfNextAvailable?.dateCreated,
-        "ACTUAL DATE: ",
-        findNearestNextDate?.dateCreated
-      );
+      // console.log(
+      //   "PREV: ",
+      //   checkIfPreviousAvailable?.dateCreated,
+      //   "NEXT: ",
+      //   checkIfNextAvailable?.dateCreated,
+      //   "ACTUAL DATE: ",
+      //   findNearestNextDate?.dateCreated
+      // );
       return {
         dateValue: findNearestNextDate
           ? findNearestNextDate.dateCreated
@@ -131,14 +131,14 @@ export function getDateByOperation(
         moment(findNearestNextDate?.dateCreated, "YYYY-MM-DD")
       )
     );
-    console.log(
-      "PREV: ",
-      checkIfPreviousAvailable?.dateCreated,
-      "NEXT: ",
-      checkIfNextAvailable?.dateCreated,
-      "ACTUAL DATE: ",
-      findNearestNextDate?.dateCreated
-    );
+    // console.log(
+    //   "PREV: ",
+    //   checkIfPreviousAvailable?.dateCreated,
+    //   "NEXT: ",
+    //   checkIfNextAvailable?.dateCreated,
+    //   "ACTUAL DATE: ",
+    //   findNearestNextDate?.dateCreated
+    // );
     return {
       dateValue: findNearestNextDate
         ? findNearestNextDate.dateCreated
@@ -147,4 +147,43 @@ export function getDateByOperation(
       isNextAvailable: checkIfNextAvailable ? true : false,
     };
   }
+}
+
+export function sumArray(arr: number[]) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
+export const checkMaxWords = (
+  subType: SubscriptionType,
+  totalWordsForTheDay: number
+) => {
+  switch (subType) {
+    case "free":
+      return totalWordsForTheDay >= 20 ? true : false;
+    case "pro":
+      return totalWordsForTheDay >= 15000 ? true : false;
+    case "unlimited":
+      return false;
+    default:
+      false;
+  }
+};
+export const subscriptionExpired = (expirationDate: string | null) => {
+  if (expirationDate) {
+    const formatDate = moment(expirationDate);
+    const today = moment();
+    const isToday = formatDate.isSame(today, "day");
+    return isToday ? true : false;
+  }
+  return false;
+};
+
+export function getText(html: string) {
+  var divContainer = document.createElement("div");
+  divContainer.innerHTML = html;
+  return divContainer.textContent || divContainer.innerText || "";
 }

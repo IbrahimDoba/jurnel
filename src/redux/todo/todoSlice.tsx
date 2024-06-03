@@ -36,7 +36,7 @@ const todoSlice = createSlice({
       const findItemIndex = state.todos[findTodoIndex].todoItems.findIndex(
         (item) => item.id === payload.todoId
       );
-      console.log("TODOID: ", findItemIndex, "ITEM ID: ", findItemIndex);
+      console.log("ITEM updating PAYLOAD: ", payload.itemData);
       state.todos[findTodoIndex].todoItems[findItemIndex] = payload.itemData;
     },
     createCategory: (state, { payload }: { payload: TodoType }) => {
@@ -55,7 +55,7 @@ const todoSlice = createSlice({
         payload.item,
       ];
 
-      console.log(state.todos);
+      console.log("ITEM ADDING PAYLOAD: ", payload);
     },
     deleteTodoCategory: (state, { payload }: { payload: any }) => {
       const filterOutTodo = state.todos.filter((j) => j.id !== payload.id);
