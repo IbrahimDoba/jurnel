@@ -3,21 +3,34 @@ import AddNew from "@/components/add-new";
 import JournalControls from "@/components/journal-controls";
 import JournalEntry from "@/components/journal-entry";
 import { defaultHtml } from "@/data/default";
-import { db, journalCollectionRef } from "@/firebase";
+import {
+  db,
+  journalCollectionRef,
+  subscriptionCollectionRef,
+} from "@/firebase";
 import {
   deleteJournal,
   fetchJournals,
   updateJournal,
 } from "@/redux/journal/journalSlice";
-import { getDateByOperation, sortJournalsByDate } from "@/utils/helpers";
+import {
+  getDateByOperation,
+  sortJournalsByDate,
+  subscriptionExpired,
+} from "@/utils/helpers";
 import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
-import { DisplayJournalType, journalType } from "../../../../types";
+import {
+  BackendSubscriptionType,
+  DisplayJournalType,
+  journalType,
+} from "../../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
 import moment from "moment";
 import { nanoid } from "nanoid";
+import { loadSubscription, subExpired } from "@/redux/subscription/subscriptionSlice";
 
 type NewEntry = {
   id: string;
@@ -107,6 +120,21 @@ function Jurnal() {
       (async () => {
         setIsLoading(true);
         const journals = await getDocs(journalCollectionRef);
+        const subscriptions = await getDocs(subscriptionCollectionRef);
+        const allSubs: any = subscriptions.docs.map((sub) => ({
+          ...sub.data(),
+          id: sub.id,
+        }));
+        const findUserSub: BackendSubscriptionType = allSubs.find(
+          (item: BackendSubscriptionType) => item.userEmail === user.email
+        );
+        if (findUserSub && subscriptionExpired(findUserSub.expirationDate)) {
+          // subscription expired
+          dispatch(subExpired());
+        } else if(findUserSub) {
+          console.log("I FOUND UR SUB")
+          dispatch(loadSubscription(findUserSub));
+        }
         const allJournals: any = journals.docs.map((journal) => ({
           ...journal.data(),
           id: journal.id,

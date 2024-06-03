@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { CgUser } from "react-icons/cg";
 import { useDispatch } from "react-redux";
+import PremiumModal from "./premiumModal";
 
 interface UserButtonProps {
   email?: string | null | undefined;
@@ -17,6 +18,7 @@ interface UserButtonProps {
 function UserButton({ user }: { user: UserButtonProps }) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [popover, setPopover] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!popover) return;
@@ -67,10 +69,20 @@ function UserButton({ user }: { user: UserButtonProps }) {
       <div
         id="popover"
         ref={popoverRef}
-        className={`whitespace-nowrap absolute overflow-hidden -top-32 left-0 flex flex-col bg-main text-accent/50 text-sm shadow-2xl rounded-md  ${
+        className={`whitespace-nowrap absolute overflow-hidden -top-52 left-0 flex flex-col bg-main text-accent/50 text-sm shadow-2xl rounded-md  ${
           !popover ? "invisible animate-up" : "visible animate-down"
         } transition-all duration-300`}
       >
+        <div className="py-4 px-5 border-b font-semibold text-accent">
+          <p>You are currently on the free trial  with a <br/> 1000 character daily limit. </p>
+          <button
+            type="button"
+            className="mt-2 px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-primary-dark transition duration-300 "
+            onClick={() =>setIsModalOpen(true)}
+          >
+            Explore WordGen Premium 	&#10024;
+          </button>
+        </div>
         <div className="flex gap-4 py-4 px-5 items-center border-b text-accent">
           <CgUser size={18} />
           <div className="flex flex-col">
@@ -88,6 +100,7 @@ function UserButton({ user }: { user: UserButtonProps }) {
           <span className="text-sm">sign out</span>
         </button>
       </div>
+      <PremiumModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import {
 import moment from "moment";
 import { toast } from "react-toastify";
 import { checkMaxWords, getText, sumArray } from "@/utils/helpers";
+import PremiumModal from "./premiumModal";
 
 interface Entry {
   id: string;
@@ -47,6 +48,7 @@ function JournalEntry({
   const [journalTitle, setJournalTitle] = useState<string>(title);
   const [editorContent, setEditorContent] = useState<string>(body);
   const [initiateAutoSave, setInitiateAutoSave] = useState(false);
+  const [limitModal, setLimitModal] = useState(false);
   const [debounceEditorContent] = useDebounce(editorContent, 1500);
   const [debounceTitle] = useDebounce(journalTitle, 1500);
   const { journals } = useSelector((state: IRootState) => state.journal);
@@ -54,7 +56,9 @@ function JournalEntry({
     (state: IRootState) => state.subscription
   );
   const dispatch = useDispatch();
-
+  const handleCloseLimitModal = () => {
+    setLimitModal(!limitModal);
+  };
   const handleDelete = async () => {
     if (id) {
       const journalToDelete = doc(db, "journal", id);
@@ -152,9 +156,12 @@ function JournalEntry({
       .filter((j) => j.dateCreated === today)
       .map((eachTodays) => getText(eachTodays.value).length);
     const sumAllTodayEntries = sumArray(findAllTodaysJournals);
-    console.log("SUM: ", findAllTodaysJournals);
+    console.log("SUM: ", sumAllTodayEntries);
     const checkLimit = checkMaxWords(subscription, sumAllTodayEntries);
-    checkLimit ? setLimitExeeded(true) : setLimitExeeded(false);
+    if (checkLimit) {
+      setLimitExeeded(true);
+      setLimitModal(true);
+    }
   }, [journals, subscription]);
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
@@ -209,6 +216,7 @@ function JournalEntry({
         defaultContent={editorContent}
         setEditorContent={setEditorContent}
       />
+      <PremiumModal isOpen={limitModal} onClose={handleCloseLimitModal} />
     </li>
   );
 }

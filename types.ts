@@ -40,3 +40,10 @@ export type TodoType = {
 };
 
 export type SubscriptionType = "free" | "pro" | "unlimited";
+
+export type BackendSubscriptionType = {
+  userEmail: string;
+  subscription: SubscriptionType;
+  expirationDate: string;
+  dateCreated: string;
+};

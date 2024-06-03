@@ -8,6 +8,7 @@ import { getDocs } from "firebase/firestore";
 import { BackendTodoType, TodoItemType, TodoType } from "../../../../types";
 import { fetchTodos } from "@/redux/todo/todoSlice";
 import { useRouter } from "next/navigation";
+import PremiumModal from "@/components/premiumModal";
 
 export interface itemProps {
   id: number;
@@ -17,11 +18,42 @@ export interface itemProps {
 const ListPage = () => {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const { todos } = useSelector((state: IRootState) => state.todos);
+  const { subscription } = useSelector(
+    (state: IRootState) => state.subscription
+  );
   const [newCategory, setNewCategory] = useState<TodoType | null>(null);
+  const [limitModal, setLimitModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-  console.log("checking todos: ", todos);
+  console.log("TRACKING TODOS: ", todos);
+  const handleNewCategory = () => {
+    console.log("ITEM LENGTH: ", todos.length, subscription);
+    if (subscription !== "free" && todos.length < 6) {
+      setNewCategory({
+        userEmail: user.email,
+        id: "",
+        todoItems: [],
+        headerTitle: "",
+      });
+      return;
+    } else if (subscription === "free" && todos.length < 3) {
+      setNewCategory({
+        userEmail: user.email,
+        id: "",
+        todoItems: [],
+        headerTitle: "",
+      });
+      return;
+    } else {
+      setErrorMsg("limit reached");
+      subscription !== "unlimited" ? setLimitModal(true) : null;
+    }
+  };
+  const handleCloseLimitModal = () => {
+    setLimitModal(!limitModal);
+  };
   useEffect(() => {
     if (isLogged && user.email) {
       (async () => {
@@ -62,8 +94,16 @@ const ListPage = () => {
   console.log("TRACK MAIN TODO_: ", todos);
   return (
     // create for how are you feeling today / grocery list / postivie affirmation
-    <div className="flex w-full justify-center items-center">
-      <div className="transperant flex relative pt-16 flex-wrap justify-between items-around  min-w-[800px] mt-[25px] mx-[24px]  rounded-xl  ">
+    <div className="w-full h-full max-w-screen-xl p-8 space-y-6 lg:space-y-10">
+      <button
+        className="p-2 px-4 bg-accent text-white rounded-md ml-auto w-fit"
+        onClick={handleNewCategory}
+      >
+        New Category
+      </button>
+
+      {/* todo grid */}
+      <ul className="grid grid-cols-[repeat(auto-fill,_minmax(19rem,_1fr))] gap-8 md:gap-12 lg:gap-16 justify-center">
         {todos.map((todo) => (
           <Todolist headerId={todo.id} key={todo.id} todoItems={todo} />
         ))}
@@ -75,25 +115,16 @@ const ListPage = () => {
             headerPlaceHolder="New Category"
           />
         )}
+      </ul>
+      <span className="text-sm text-red-500 font-semibold">{errorMsg}</span>
 
-        {!newCategory && todos.length === 0 && (
+      {/* empty entries notification */}
+      {!newCategory && todos.length === 0 && (
+        <div className="w-full h-full grid place-content-center">
           <span>You haven&apos;t created any Todos</span>
-        )}
-
-        <button
-          className="p-1 px-4 bg-accent text-white rounded-md absolute top-0 right-0"
-          onClick={() =>
-            setNewCategory({
-              userEmail: user.email,
-              id: "",
-              todoItems: [],
-              headerTitle: "",
-            })
-          }
-        >
-          New Category
-        </button>
-      </div>
+        </div>
+      )}
+      <PremiumModal isOpen={limitModal} onClose={handleCloseLimitModal} />
     </div>
   );
 };

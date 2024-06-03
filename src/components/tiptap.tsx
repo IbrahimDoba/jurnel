@@ -32,7 +32,7 @@ const Tiptap = ({
     extensions: [
       StarterKit.configure({}),
       CharacterCount.configure({
-        limit: 1000,
+        limit,
       }),
       Underline,
     ],
@@ -65,7 +65,7 @@ const Tiptap = ({
     <>
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
-      <Progress editor={editor} percentage={percentage} />
+      <Progress editor={editor} percentage={percentage} limit={limit} />
     </>
   );
 };

@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SubscriptionType, User } from "../../../types";
+import {
+  BackendSubscriptionType,
+  SubscriptionType,
+  User,
+} from "../../../types";
 
 type initialStateType = {
   subscription: SubscriptionType;
@@ -13,8 +17,16 @@ const subscriptionSlice = createSlice({
   name: "subscription",
   initialState: initailState,
   reducers: {
-    upgradePro: (state) => {
+    loadSubscription: (
+      state,
+      action: PayloadAction<BackendSubscriptionType>
+    ) => {
+      state.subscription = action.payload.subscription;
+      state.expirationDate = action.payload.expirationDate;
+    },
+    upgradePro: (state, action: PayloadAction<string>) => {
       state.subscription = "pro";
+      state.expirationDate = action.payload;
     },
     upgradeUnlimited: (state) => {
       state.subscription = "unlimited";
@@ -26,6 +38,6 @@ const subscriptionSlice = createSlice({
   },
 });
 
-export const { upgradePro, upgradeUnlimited, subExpired } =
+export const { upgradePro, upgradeUnlimited, subExpired, loadSubscription } =
   subscriptionSlice.actions;
 export default subscriptionSlice.reducer;

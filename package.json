@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.4",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.4.1",
     "@tailwindcss/typography": "^0.5.13",
     "@tiptap/extension-bubble-menu": "^2.4.0",
     "@tiptap/extension-character-count": "^2.4.0",
