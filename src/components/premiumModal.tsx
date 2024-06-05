@@ -35,7 +35,7 @@ const PremiumModal = ({
         </div>
         <div className="p-6 text-center">
           <div className="flex justify-center items-center">
-            <h2 className="text-xl font-bold mb-8  w-[60%] ">
+            <h2 className="text-xl font-bold mb-8 w-[60%]">
               <span className="text-emerald-500">Boundless</span>...
               appreciation, embracing change, expressing frustrations,
               strategizing, uncovering personal insights, and continuous
@@ -58,12 +58,18 @@ const PremiumModal = ({
             </ul>
           </div>
           <div className="flex flex-col gap-2">
-            <button className="bg-emerald-500 hover:bg-emerald-600 bg-gradient-to-r from-emerald-500 to-emerald-700 text-white py-2 px-4 rounded-md">
+            <a
+              href="https://buy.stripe.com/dR6eVQ0058S3e0UbII"
+              className="bg-emerald-500 hover:bg-emerald-600 bg-gradient-to-r from-emerald-500 to-emerald-700 text-white py-2 px-4 rounded-md"
+            >
               WordGen Plus | $4.99/month | Maximum words daily 15k ✨
-            </button>
-            <button className="bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white py-2 px-4 rounded-md">
+            </a>
+            <a
+              href="https://buy.stripe.com/5kA5lg4gl7NZ7Cw5kl"
+              className="bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white py-2 px-4 rounded-md"
+            >
               WordGen Unlimited | $9.99/year (1200% more value)✨
-            </button>
+            </a>
           </div>
         </div>
       </div>
