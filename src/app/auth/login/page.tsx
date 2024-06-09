@@ -113,24 +113,24 @@ const Login = () => {
               }
             />
           </div>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center flex-col">
             {" "}
             {/* change to between when forgot password func is available */}
             <button
               disabled={isLoading}
               onClick={handleSubmit}
-              className={` bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded ${
+              className={` bg-emerald-500 hover:bg-emerald-700 mb-4 text-white font-bold py-2 px-4 rounded ${
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               {isLoading ? "Loading..." : "Sign In"}
             </button>
-            {/* <a
-            href="#"
+            <Link
+            href="/auth/reset-password"
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
           >
             Forgot Password?
-          </a> */}
+          </Link>
           </div>
           {/* <div className="mt-6 text-center">
             <div className="w-full border-t border-gray-200"></div>

@@ -2,7 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BsArrowRight } from "react-icons/bs";
-import PremiumModal from "@/components/premiumModal";
 
 export default function Page() {
   return (
@@ -46,7 +45,6 @@ export default function Page() {
           className="object-cover"
         />
       </div>
-      <PremiumModal isOpen onClose={() => {}} />
     </section>
   );
 }
