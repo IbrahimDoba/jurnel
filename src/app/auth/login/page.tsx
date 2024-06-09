@@ -76,7 +76,6 @@ const Login = () => {
           <Image src={loginPNG} alt="Login Png" width={700} />
         </div>
         <div className="w-full max-w-lg mx-auto bg-emerald-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <span>{errorMsg}</span>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -95,7 +94,7 @@ const Login = () => {
               }
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="password"
@@ -113,7 +112,8 @@ const Login = () => {
               }
             />
           </div>
-          <div className="flex items-center justify-center flex-col">
+          <span className="text-red-600  text-xl">{errorMsg}</span>
+          <div className="flex items-center justify-center flex-col mt-3">
             {" "}
             {/* change to between when forgot password func is available */}
             <button
@@ -125,6 +125,7 @@ const Login = () => {
             >
               {isLoading ? "Loading..." : "Sign In"}
             </button>
+
             <Link
             href="/auth/reset-password"
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"

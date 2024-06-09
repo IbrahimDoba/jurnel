@@ -89,8 +89,6 @@ const SignUp = () => {
           <Image src={SignupPNG} alt="Login Png" width={900} />
         </div>
         <div className="w-full max-w-lg mx-auto bg-emerald-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <span>{errorMsg}</span>
-
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -127,7 +125,7 @@ const SignUp = () => {
               }
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-2">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="confirmPassword"
@@ -148,7 +146,9 @@ const SignUp = () => {
               }
             />
           </div>
-          <div className="flex flex-col items-center justify-between">
+          <span className="text-red-600  text-xl">{errorMsg}</span>
+
+          <div className="flex flex-col items-center justify-between mt-2">
             <button
               disabled={isLoading}
               onClick={handleSubmit}
