@@ -1,7 +1,6 @@
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
 import { collection, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAAd9GoRBTisdTOMgf8hGpg39f-BS7I0UY",
@@ -13,7 +12,6 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 // DB
 export const db = getFirestore(app);
 export const journalCollectionRef = collection(db, "journal");

@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/paymentJson.json
 /.pnp
 .pnp.js
 .yarn/install-state.gz
