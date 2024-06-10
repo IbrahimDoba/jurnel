@@ -9,6 +9,7 @@ import {
   subscriptionCollectionRef,
 } from "@/firebase";
 import {
+  addJournal,
   deleteJournal,
   fetchJournals,
   updateJournal,
@@ -18,7 +19,7 @@ import {
   sortJournalsByDate,
   subscriptionExpired,
 } from "@/utils/helpers";
-import { deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import {
   BackendSubscriptionType,
@@ -30,7 +31,10 @@ import { useRouter } from "next/navigation";
 import { IRootState } from "@/redux/store";
 import moment from "moment";
 import { nanoid } from "nanoid";
-import { loadSubscription, subExpired } from "@/redux/subscription/subscriptionSlice";
+import {
+  loadSubscription,
+  subExpired,
+} from "@/redux/subscription/subscriptionSlice";
 
 type NewEntry = {
   id: string;
@@ -58,7 +62,7 @@ function Jurnal() {
     next: false,
     previous: false,
   });
-  const [entryForToday, setEntryForToday] = useState<NewEntry[] | null>(null);
+  const [addJournalLoading, setAddJournalLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [trackDate, setTrackDate] = useState("");
   const [displayJournals, setDisplayJournals] = useState<DisplayJournalType>({
@@ -67,20 +71,30 @@ function Jurnal() {
   });
   const lastEntryRef = useRef<HTMLDivElement | null>(null);
 
-  const addEntry = () => {
-    setEntryForToday([
-      {
-        id: "",
-        title: "Welcome to Journal by Wordgen 🎉",
-        value: "<p>Dear Journal.</p>",
-        dateCreated: moment().format("YYYY-MM-DD"),
-      },
-    ]);
-
+  const addEntry = async () => {
+    setAddJournalLoading(true);
+    await addDoc(journalCollectionRef, {
+      userEmail: user.email,
+      title: "Welcome to Journal by Wordgen 🎉",
+      value: "<p>Dear Journal.</p>",
+      dateCreated: moment().format("YYYY-MM-DD"),
+    } as journalType).then((res) => {
+      dispatch(
+        addJournal({
+          userEmail: user.email,
+          id: res.id,
+          title: "Welcome to Journal by Wordgen 🎉",
+          value: "<p>Dear Journal.</p>",
+          dateCreated: moment().format("YYYY-MM-DD"),
+        })
+      );
+      setAddJournalLoading(false);
+    });
     // Scroll to the bottom
     if (lastEntryRef.current) {
       lastEntryRef.current.scrollIntoView({ behavior: "smooth" });
     }
+    console.log("EXECUTED:");
   };
 
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
@@ -131,8 +145,8 @@ function Jurnal() {
         if (findUserSub && subscriptionExpired(findUserSub.expirationDate)) {
           // subscription expired
           dispatch(subExpired());
-        } else if(findUserSub) {
-          console.log("I FOUND UR SUB")
+        } else if (findUserSub) {
+          console.log("I FOUND UR SUB");
           dispatch(loadSubscription(findUserSub));
         }
         const allJournals: any = journals.docs.map((journal) => ({
@@ -220,7 +234,6 @@ function Jurnal() {
           displayJournals.dateCreated === today && (
             <JournalEntry
               id={dummyEntries[0].id ?? ""}
-              setEntryForToday={setEntryForToday}
               title={dummyEntries[0].title}
               body={dummyEntries[0].value}
               dateCreated={dummyEntries[0].dateCreated}
@@ -231,28 +244,30 @@ function Jurnal() {
         {displayJournals.activeJournal.map((entry, index) => (
           <JournalEntry
             key={entry.id ?? nanoid()}
-            setEntryForToday={setEntryForToday}
             id={entry.id ?? ""}
             title={entry.title}
             body={entry.value}
             dateCreated={entry.dateCreated}
           />
         ))}
-        {entryForToday &&
-          entryForToday.map((entry, index) => (
-            <JournalEntry
-              setEntryForToday={setEntryForToday}
-              key={nanoid()}
-              id={entry.id ?? ""}
-              title={entry.title}
-              body={entry.value}
-              dateCreated={entry.dateCreated}
-              // ref={index === entryForToday.length - 1 ? lastEntryRef : null}
-            />
-          ))}
+        {/* {journals &&
+          journals
+            .filter((j) => j.id === "new")
+            .map((entry, index) => (
+              <JournalEntry
+                setEntryForToday={setEntryForToday}
+                key={nanoid()}
+                id={entry.id ?? ""}
+                title={entry.title}
+                body={entry.value}
+                dateCreated={entry.dateCreated}
+                // ref={index === entryForToday.length - 1 ? lastEntryRef : null}
+              />
+            ))} */}
       </ul>
       {/* New entry button */}
       <AddNew
+        isLoading={addJournalLoading}
         handleCreateJournal={handleCreateJournal}
         addNewEntry={addEntry}
       />

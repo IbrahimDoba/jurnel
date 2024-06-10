@@ -5,8 +5,9 @@ import { TodoItemType, TodoType } from "../../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "@/redux/store";
 import { addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
-import { db, todoCollectionRef } from "@/firebase";
+import { db, todoCollectionRef, todoItemsCollectionRef } from "@/firebase";
 import {
+  addTodoItem,
   createCategory,
   deleteTodoCategory,
   updateCategoryHeader,
@@ -25,7 +26,7 @@ const Todolist = ({
 }: {
   todoItems: TodoType;
   headerPlaceHolder?: string;
-  headerId?: string;
+  headerId: string;
   setNewCategory?: React.Dispatch<React.SetStateAction<TodoType | null>>;
 }) => {
   const dispatch = useDispatch();
@@ -46,66 +47,65 @@ const Todolist = ({
   const handleDisableAddNew = (val: boolean) => {
     setDisableAddNew(val);
   };
+
+  const handleAddeNewItem = async () => {
+    handleDisableAddNew(true);
+    await addDoc(todoItemsCollectionRef, {
+      categoryId: headerId,
+      value: "",
+      userEmail: user.email,
+    })
+      .then((res) => {
+        dispatch(
+          addTodoItem({
+            categoryId: headerId,
+            item: {
+              categoryId: headerId,
+              value: "",
+              userEmail: user.email,
+              id: res.id,
+            },
+          })
+        );
+        handleDisableAddNew(false);
+        setNewItem(null);
+      })
+      .catch((e) => {
+        toast("Something went wrong", {
+          type: "error",
+        });
+      });
+  };
+
+
   const handleSave = async () => {
     if (!isLogged) {
       return toast("Login required to save journal", {
         type: "error",
       });
     }
-    if (!headerId) {
-      // IF THERE UIS NO ID, IT'S A NEW ENTRY
-      setIsSaving(true);
-      setDisableAddNew(true);
-      await addDoc(todoCollectionRef, {
-        userEmail: user.email,
-        headerTitle,
+    const docRef = doc(db, "todo", headerId);
+    setIsSaving(true);
+    setDisableAddNew(true);
+    await setDoc(docRef, {
+      userEmail: user.email,
+      headerTitle,
+      value: trackValue,
+    })
+      .then(() => {
+        dispatch(
+          updateCategoryHeader({
+            id: headerId,
+            headerTitle,
+          })
+        );
+        setDisableAddNew(false);
       })
-        .then((res) => {
-          dispatch(
-            createCategory({
-              id: res.id,
-              headerTitle,
-              userEmail: user.email,
-              todoItems: [],
-            })
-          );
-          setDisableAddNew(false);
-          setNewCategory ? setNewCategory(null) : null;
-          toast("Saved", {
-            type: "success",
-          });
-        })
-        .catch(() => {
-          toast("Something went wrong", {
-            type: "error",
-          });
+      .catch(() => {
+        toast("Something went wrong", {
+          type: "error",
         });
-    } else {
-      // UPDATING AN EXISTING ENTRY
-      const docRef = doc(db, "todo", headerId);
-
-      setIsSaving(true);
-      setDisableAddNew(true);
-      await setDoc(docRef, {
-        userEmail: user.email,
-        headerTitle,
-        value: trackValue,
-      })
-        .then(() => {
-          dispatch(
-            updateCategoryHeader({
-              id: headerId,
-              headerTitle,
-            })
-          );
-          setDisableAddNew(false);
-        })
-        .catch(() => {
-          toast("Something went wrong", {
-            type: "error",
-          });
-        });
-    }
+      });
 
     setIsSaving(false);
   };
@@ -184,34 +184,25 @@ const Todolist = ({
         {headerId && (
           <button
             type="button"
-            onClick={() => {
-              if (newItem) {
-                setNewItem([
-                  ...newItem,
-                  {
-                    id: "",
-                    categoryId: headerId,
-                    value: "",
-                    userEmail: user.email,
-                  },
-                ]);
-              } else {
-                setNewItem([
-                  {
-                    id: "",
-                    categoryId: headerId,
-                    value: "",
-                    userEmail: user.email,
-                  },
-                ]);
-              }
-            }}
+            onClick={handleAddeNewItem}
             className={`${
               disableAddNew ? "bg-emerald-200" : "bg-emerald-500"
-            } text-white px-4 py-2 rounded`}
+            } text-white px-4 py-2 rounded flex justify-center items-center`}
             disabled={disableAddNew}
           >
-            Add Item
+            {disableAddNew ? (
+              <ColorRing
+                visible={true}
+                height="30"
+                width="30"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+              />
+            ) : (
+              "Add Item"
+            )}
           </button>
         )}
       </div>
