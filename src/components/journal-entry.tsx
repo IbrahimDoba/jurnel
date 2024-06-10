@@ -32,12 +32,14 @@ function JournalEntry({
   body,
   dateCreated,
   welcomeEntry,
+  handleShowLimitModal,
 }: {
   id: string;
   title: string;
   dateCreated: string;
   body: string;
   welcomeEntry?: boolean;
+  handleShowLimitModal: (val: boolean) => void;
 }) {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const [isLimitExeeded, setLimitExeeded] = useState(false);
@@ -46,7 +48,6 @@ function JournalEntry({
   const [journalTitle, setJournalTitle] = useState<string>(title);
   const [editorContent, setEditorContent] = useState<string>(body);
   const [initiateAutoSave, setInitiateAutoSave] = useState(false);
-  const [limitModal, setLimitModal] = useState(false);
   const [debounceEditorContent] = useDebounce(editorContent, 1500);
   const [debounceTitle] = useDebounce(journalTitle, 1500);
   const { journals } = useSelector((state: IRootState) => state.journal);
@@ -54,9 +55,6 @@ function JournalEntry({
     (state: IRootState) => state.subscription
   );
   const dispatch = useDispatch();
-  const handleCloseLimitModal = () => {
-    setLimitModal(!limitModal);
-  };
   const handleDelete = async () => {
     if (id === "new") {
       dispatch(deleteJournal({ id }));
@@ -122,13 +120,12 @@ function JournalEntry({
       .filter((j) => j.dateCreated === today)
       .map((eachTodays) => getText(eachTodays.value).length);
     const sumAllTodayEntries = sumArray(findAllTodaysJournals);
-    console.log("SUM: ", sumAllTodayEntries);
     const checkLimit = checkMaxWords(subscription, sumAllTodayEntries);
     if (checkLimit) {
       setLimitExeeded(true);
-      setLimitModal(true);
+      handleShowLimitModal(true);
     }
-  }, [journals, subscription]);
+  }, [journals, subscription, handleShowLimitModal]);
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
       <span className="text-red-500 font-bold">
@@ -182,7 +179,6 @@ function JournalEntry({
         defaultContent={editorContent}
         setEditorContent={setEditorContent}
       />
-      <PremiumModal isOpen={limitModal} onClose={handleCloseLimitModal} />
     </li>
   );
 }
