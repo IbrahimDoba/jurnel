@@ -163,7 +163,7 @@ export const checkMaxWords = (
 ) => {
   switch (subType) {
     case "free":
-      return totalWordsForTheDay >= 20 ? true : false;
+      return totalWordsForTheDay >= 1000 ? true : false;
     case "pro":
       return totalWordsForTheDay >= 15000 ? true : false;
     case "unlimited":

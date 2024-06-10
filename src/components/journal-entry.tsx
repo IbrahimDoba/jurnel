@@ -32,14 +32,12 @@ function JournalEntry({
   body,
   dateCreated,
   welcomeEntry,
-  setEntryForToday,
 }: {
   id: string;
   title: string;
   dateCreated: string;
   body: string;
   welcomeEntry?: boolean;
-  setEntryForToday: any;
 }) {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const [isLimitExeeded, setLimitExeeded] = useState(false);
@@ -60,12 +58,14 @@ function JournalEntry({
     setLimitModal(!limitModal);
   };
   const handleDelete = async () => {
+    if (id === "new") {
+      dispatch(deleteJournal({ id }));
+      return;
+    }
     if (id) {
       const journalToDelete = doc(db, "journal", id);
       dispatch(deleteJournal({ id }));
       await deleteDoc(journalToDelete);
-    } else {
-      setEntryForToday(null);
     }
     toast("Journal deleted", {
       type: "success",
@@ -79,61 +79,27 @@ function JournalEntry({
         type: "error",
       });
     }
-    if (!id || id === "") {
-      // IF THERE UIS NO ID, IT'S A NEW ENTRY
-      setErrorMsg("");
-      setIsSaving(true);
-      await addDoc(journalCollectionRef, {
-        userEmail: user.email,
-        value: editorContent,
-        title: journalTitle,
-        dateCreated: moment().format("YYYY-MM-DD"),
-      } as journalType)
-        .then((res) => {
-          dispatch(
-            addJournal({
-              userEmail: user.email,
-              value: editorContent,
-              title: journalTitle,
-              dateCreated: moment().format("YYYY-MM-DD"),
-              id: res.id,
-            })
-          );
-          setEntryForToday(null);
-          toast("Saved", {
-            type: "success",
-          });
-        })
-        .catch(() => {
-          setErrorMsg("Something went wrong");
-          toast("Failed to save", {
-            type: "error",
-          });
-        });
-    } else {
-      // UPDATING AN EXISTING ENTRY
-      const docRef = doc(db, "journal", id);
-      setIsSaving(true);
-      await setDoc(docRef, {
-        userEmail: user.email,
-        value: editorContent,
-        title: journalTitle,
-        dateCreated: dateCreated,
-      } as journalType)
-        .then(() => {
-          dispatch(
-            updateJournal({
-              value: editorContent,
-              title: journalTitle,
-              dateCreated: dateCreated,
-              id,
-            })
-          );
-        })
-        .catch(() => {
-          setErrorMsg("Something went wrong");
-        });
-    }
+    const docRef = doc(db, "journal", id);
+    setIsSaving(true);
+    await setDoc(docRef, {
+      userEmail: user.email,
+      value: editorContent,
+      title: journalTitle,
+      dateCreated: dateCreated,
+    } as journalType)
+      .then(() => {
+        dispatch(
+          updateJournal({
+            value: editorContent,
+            title: journalTitle,
+            dateCreated: dateCreated,
+            id,
+          })
+        );
+      })
+      .catch(() => {
+        setErrorMsg("Something went wrong");
+      });
 
     setIsSaving(false);
   };

@@ -4,11 +4,13 @@ import Todolist from "./Todolist";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "@/redux/store";
 import { todoCollectionRef, todoItemsCollectionRef } from "@/firebase";
-import { getDocs } from "firebase/firestore";
+import { addDoc, getDocs } from "firebase/firestore";
 import { BackendTodoType, TodoItemType, TodoType } from "../../../../types";
-import { fetchTodos } from "@/redux/todo/todoSlice";
+import { createCategory, fetchTodos } from "@/redux/todo/todoSlice";
 import { useRouter } from "next/navigation";
 import PremiumModal from "@/components/premiumModal";
+import { toast } from "react-toastify";
+import { ColorRing } from "react-loader-spinner";
 
 export interface itemProps {
   id: number;
@@ -21,30 +23,44 @@ const ListPage = () => {
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
   );
-  const [newCategory, setNewCategory] = useState<TodoType | null>(null);
+  const [newCategoryLoading, setNewCategoryLoading] = useState(false);
   const [limitModal, setLimitModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
   console.log("TRACKING TODOS: ", todos);
+
+  const saveNewCategory = async () => {
+    setNewCategoryLoading(true);
+    await addDoc(todoCollectionRef, {
+      userEmail: user.email,
+      headerTitle: "",
+    })
+      .then((res) => {
+        dispatch(
+          createCategory({
+            id: res.id,
+            headerTitle: "",
+            userEmail: user.email,
+            todoItems: [],
+          })
+        );
+      })
+      .catch(() => {
+        toast("Something went wrong", {
+          type: "error",
+        });
+      });
+    setNewCategoryLoading(false);
+  };
   const handleNewCategory = () => {
     console.log("ITEM LENGTH: ", todos.length, subscription);
     if (subscription !== "free" && todos.length < 6) {
-      setNewCategory({
-        userEmail: user.email,
-        id: "",
-        todoItems: [],
-        headerTitle: "",
-      });
+      saveNewCategory();
       return;
     } else if (subscription === "free" && todos.length < 3) {
-      setNewCategory({
-        userEmail: user.email,
-        id: "",
-        todoItems: [],
-        headerTitle: "",
-      });
+      saveNewCategory();
       return;
     } else {
       setErrorMsg("limit reached");
@@ -99,7 +115,19 @@ const ListPage = () => {
         className="p-2 px-4 bg-accent text-white rounded-md ml-auto w-fit"
         onClick={handleNewCategory}
       >
-        New Category
+        {newCategoryLoading || isLoading ? (
+          <ColorRing
+            visible={true}
+            height="30"
+            width="30"
+            ariaLabel="color-ring-loading"
+            wrapperStyle={{}}
+            wrapperClass="color-ring-wrapper"
+            colors={["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]}
+          />
+        ) : (
+          "New Category"
+        )}
       </button>
 
       {/* todo grid */}
@@ -107,21 +135,17 @@ const ListPage = () => {
         {todos.map((todo) => (
           <Todolist headerId={todo.id} key={todo.id} todoItems={todo} />
         ))}
-
-        {newCategory && (
-          <Todolist
-            todoItems={newCategory}
-            setNewCategory={setNewCategory}
-            headerPlaceHolder="New Category"
-          />
-        )}
       </ul>
       <span className="text-sm text-red-500 font-semibold">{errorMsg}</span>
 
       {/* empty entries notification */}
-      {!newCategory && todos.length === 0 && (
+      {todos.length === 0 && (
         <div className="w-full h-full grid place-content-center">
-          <span>You haven&apos;t created any Todos</span>
+          {isLoading ? (
+            "Loading..."
+          ) : (
+            <span>You haven&apos;t created any Todos</span>
+          )}
         </div>
       )}
       <PremiumModal isOpen={limitModal} onClose={handleCloseLimitModal} />

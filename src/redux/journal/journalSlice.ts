@@ -20,9 +20,13 @@ const journalSlice = createSlice({
       const findJournalIndex = state.journals.findIndex(
         (j) => j.id === payload.id
       );
+      const createPayload = {
+        ...payload,
+        id: payload.newId ? payload.newId : payload.id,
+      };
       state.journals[findJournalIndex] = {
         ...state.journals[findJournalIndex],
-        ...payload,
+        ...createPayload,
       };
     },
     addJournal: (state, { payload }: { payload: journalType }) => {
