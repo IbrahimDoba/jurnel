@@ -10,7 +10,7 @@ export default function Page() {
         <h1 className="text-3xl lg:text-7xl font-bold mt-3">WordGen</h1>
         <p className="text-xl lg:text-2xl max-w-[900px]">
           Welcome to WordGen, a platform to learn new words, names, quotes, and
-          jurnel.
+          Jurnal .
         </p>
         <div className="flex gap-8">
           <Link
@@ -24,7 +24,7 @@ export default function Page() {
             href="/auth/login"
             className="w-fit p-2 flex items-center justify-center font-semibold rounded-full gap-2 border-2 border-accent hover:bg-primary outline-none min-w-[8rem] focus-visible:gap-4 focus-visible:bg-main/10 transition-all duration-300"
           >
-            Jurnel
+            Jurnal 
             <BsArrowRight aria-hidden="true" />
           </Link>
           <Link
