@@ -35,6 +35,7 @@ import {
   loadSubscription,
   subExpired,
 } from "@/redux/subscription/subscriptionSlice";
+import PremiumModal from "@/components/premiumModal";
 
 type NewEntry = {
   id: string;
@@ -63,6 +64,7 @@ function Jurnal() {
     previous: false,
   });
   const [addJournalLoading, setAddJournalLoading] = useState(false);
+  const [limitModal, setLimitModal] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [trackDate, setTrackDate] = useState("");
   const [displayJournals, setDisplayJournals] = useState<DisplayJournalType>({
@@ -103,6 +105,9 @@ function Jurnal() {
   const dispatch = useDispatch();
   const today = moment().format("YYYY-MM-DD");
 
+  const handleLimitExceeded = (val: boolean) => {
+    setLimitModal(val);
+  };
   const handleRenderJournalByDate = (operation: "next" | "previous") => {
     const { dateValue, isNextAvailable, isPreviousAvailable } =
       getDateByOperation(journals, displayJournals.dateCreated, operation);
@@ -233,6 +238,7 @@ function Jurnal() {
         {displayJournals.activeJournal.length <= 0 &&
           displayJournals.dateCreated === today && (
             <JournalEntry
+              handleShowLimitModal={handleLimitExceeded}
               id={dummyEntries[0].id ?? ""}
               title={dummyEntries[0].title}
               body={dummyEntries[0].value}
@@ -243,6 +249,7 @@ function Jurnal() {
         {/* entry list */}
         {displayJournals.activeJournal.map((entry, index) => (
           <JournalEntry
+            handleShowLimitModal={handleLimitExceeded}
             key={entry.id ?? nanoid()}
             id={entry.id ?? ""}
             title={entry.title}
@@ -270,6 +277,10 @@ function Jurnal() {
         isLoading={addJournalLoading}
         handleCreateJournal={handleCreateJournal}
         addNewEntry={addEntry}
+      />
+      <PremiumModal
+        isOpen={limitModal}
+        onClose={() => handleLimitExceeded(false)}
       />
     </section>
   );
