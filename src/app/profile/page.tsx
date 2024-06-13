@@ -14,7 +14,7 @@ const Profile = () => {
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const handleClose = () => setIsModalOpen(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
