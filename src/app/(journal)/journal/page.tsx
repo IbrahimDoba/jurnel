@@ -64,7 +64,8 @@ function Jurnal() {
     previous: false,
   });
   const [addJournalLoading, setAddJournalLoading] = useState(false);
-  const [limitModal, setLimitModal] = useState(true);
+  const [limitModal, setLimitModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [trackDate, setTrackDate] = useState("");
   const [displayJournals, setDisplayJournals] = useState<DisplayJournalType>({

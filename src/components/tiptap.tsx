@@ -13,10 +13,12 @@ const Tiptap = ({
   setInitiateAutoSave,
   defaultContent,
   isLimitExceeded,
+  handleEditorChange,
 }: {
   setEditorContent: React.Dispatch<React.SetStateAction<string>>;
   defaultContent: string;
   setInitiateAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
+  handleEditorChange: () => void;
   isLimitExceeded: boolean;
 }) => {
   const { subscription } = useSelector(
@@ -47,6 +49,7 @@ const Tiptap = ({
       setInitiateAutoSave(true);
       const html = editor.getHTML();
       editor.setOptions();
+      handleEditorChange();
       isLimitExceeded
         ? setEditorContent(defaultContent)
         : setEditorContent(html);

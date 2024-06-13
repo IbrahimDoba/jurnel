@@ -114,7 +114,7 @@ function JournalEntry({
   }, [debounceEditorContent, user.email, initiateAutoSave, debounceTitle]);
 
   // THIS HANDLES THE WORD COUNT BASED ON USER SUB
-  useEffect(() => {
+  const handleTrackUsage = () => {
     const today = moment().format("YYYY-MM-DD");
     const findAllTodaysJournals = journals
       .filter((j) => j.dateCreated === today)
@@ -125,7 +125,7 @@ function JournalEntry({
       setLimitExeeded(true);
       handleShowLimitModal(true);
     }
-  }, [journals, subscription, handleShowLimitModal]);
+  };
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
       <span className="text-red-500 font-bold">
@@ -142,6 +142,7 @@ function JournalEntry({
               onChange={(e) => {
                 setJournalTitle(e.target.value);
                 setInitiateAutoSave(true);
+                handleTrackUsage();
               }}
               placeholder="Some nice title..."
               spellCheck={false}
@@ -174,6 +175,7 @@ function JournalEntry({
         )}
       </div>
       <Tiptap
+        handleEditorChange={() => handleTrackUsage()}
         isLimitExceeded={isLimitExeeded}
         setInitiateAutoSave={setInitiateAutoSave}
         defaultContent={editorContent}
