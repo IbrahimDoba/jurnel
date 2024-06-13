@@ -10,11 +10,11 @@ import { usePathname } from "next/navigation";
 import PremiumModal from "@/components/premiumModal";
 
 const Profile = () => {
-  const { user } = useSelector((state: IRootState) => state.user);
+  const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const handleClose = () => setIsModalOpen(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -39,30 +39,35 @@ const Profile = () => {
         </div>
 
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-          <div className="absolute top-4 right-4 text-center ml-6">
-            <span className="mr-2 font-bold">Plan:</span>
-            {subscription === "free" ? (
-              <span
-                onClick={() => setIsModalOpen(true)}
-                className="text-white bg-red-500 rounded-lg px-2 py-[2px] font-semibold cursor-pointer"
-              >
-                Free
-              </span>
-            ) : subscription === "pro" ? (
-              <span
-                onClick={() => setIsModalOpen(true)}
-                className={`${"bg-purple-600"} text-white cursor-pointer rounded-lg capitalize text-center px-2 py-0.5`}
-              >
-                {subscription}✨
-              </span>
-            ) : (
-              <span
-                className={`${"bg-yellow-600"} text-white  rounded-lg capitalize text-center px-2 py-0.5`}
-              >
-                {subscription}✨
-              </span>
-            )}
-          </div>
+          {isLogged ? (
+            <div className="absolute top-4 right-4 text-center ml-6">
+              <span className="mr-2 font-bold">Plan:</span>
+              {subscription === "free" ? (
+                <span
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-white bg-red-500 rounded-lg px-2 py-[2px] font-semibold cursor-pointer"
+                >
+                  Free
+                </span>
+              ) : subscription === "pro" ? (
+                <span
+                  onClick={() => setIsModalOpen(true)}
+                  className={`${"bg-purple-600"} text-white cursor-pointer rounded-lg capitalize text-center px-2 py-0.5`}
+                >
+                  {subscription}✨
+                </span>
+              ) : (
+                <span
+                  className={`${"bg-yellow-600"} text-white  rounded-lg capitalize text-center px-2 py-0.5`}
+                >
+                  {subscription}✨
+                </span>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+
           <Link
             href="/journal"
             className=" text-emerald-400 cursor-pointer hover:scale-100 duration-150"

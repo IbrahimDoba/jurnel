@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import PremiumModal from "./premiumModal";
 
 const Navbar: React.FC = () => {
+  const { isLogged } = useSelector((state: IRootState) => state.user);
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
   );
@@ -57,23 +58,38 @@ const Navbar: React.FC = () => {
               Journal
             </Link>
           </li>
-          <li className="text-center ml-6">
-            {subscription === "free" ? (
-              <span
-                onClick={() => setIsModalOpen(true)}
-                className="text-red-500 rounded-full px-2 py-[2px] font-semibold cursor-pointer"
-              >
-                upgrade
-              </span>
-            ) : (
+          {isLogged ? (
+            <li className="text-center ml-6">
+              {subscription === "free" ? (
+                <span
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-red-500 rounded-full px-2 py-[2px] font-semibold cursor-pointer"
+                >
+                  upgrade
+                </span>
+              ) : (
+                <Link
+                  href="/profile"
+                  className={`${
+                    subscription === "pro" ? "bg-purple-600" : "bg-yellow-600"
+                  } text-white  rounded-lg capitalize text-center px-2 py-0.5`}
+                >
+                  {subscription}✨
+                </Link>
+              )}
+            </li>
+          ) : (
+            <li>
               <Link
-                href="/profile"
-                className={`${subscription === "pro" ? "bg-purple-600" : "bg-yellow-600"} text-white  rounded-lg capitalize text-center px-2 py-0.5`}
+                href="/auth/login"
+                className={`${
+                  pathname === "/auth/login" ? "bg-accent text-white" : ""
+                } hover:bg-accent hover:text-white transition duration-300 rounded-full px-2 py-0.5`}
               >
-                {subscription}✨
+                Login
               </Link>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
       </header>
       <PremiumModal isOpen={isModalOpen} onClose={handleClose} />
