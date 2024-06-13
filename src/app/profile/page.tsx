@@ -14,7 +14,7 @@ const Profile = () => {
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
   );
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleClose = () => setIsModalOpen(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -69,7 +69,7 @@ const Profile = () => {
           )}
 
           <Link
-            href="/journal"
+            href="/jurnal"
             className=" text-emerald-400 cursor-pointer hover:scale-100 duration-150"
           >
             <VscArrowCircleLeft size={40} />

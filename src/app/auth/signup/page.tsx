@@ -30,7 +30,7 @@ const SignUp = () => {
             profilePicture: res.user.photoURL ?? undefined,
           })
         );
-        router.push("/journal");
+        router.push("/jurnal");
       })
       .catch(() => {
         setErrorMsg(

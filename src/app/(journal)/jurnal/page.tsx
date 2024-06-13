@@ -46,13 +46,13 @@ type NewEntry = {
 const dummyEntries = [
   {
     id: "1",
-    title: "Welcome to Journal by Wordgen 🎉",
+    title: "Welcome to Jurnal by Wordgen 🎉",
     value: defaultHtml,
     dateCreated: moment().format("YYYY-MM-DD"),
   },
   {
     id: "2",
-    title: "Welcome to Journal by Wordgen 🎉",
+    title: "Welcome to Jurnal by Wordgen 🎉",
     value: "<p>Hello World</p>",
     dateCreated: moment().format("YYYY-MM-DD"),
   },
@@ -78,16 +78,16 @@ function Jurnal() {
     setAddJournalLoading(true);
     await addDoc(journalCollectionRef, {
       userEmail: user.email,
-      title: "Welcome to Journal by Wordgen 🎉",
-      value: "<p>Dear Journal.</p>",
+      title: "Welcome to Jurnal by Wordgen 🎉",
+      value: "<p>Dear Jurnal.</p>",
       dateCreated: moment().format("YYYY-MM-DD"),
     } as journalType).then((res) => {
       dispatch(
         addJournal({
           userEmail: user.email,
           id: res.id,
-          title: "Welcome to Journal by Wordgen 🎉",
-          value: "<p>Dear Journal.</p>",
+          title: "Welcome to Jurnal by Wordgen 🎉",
+          value: "<p>Dear Jurnal.</p>",
           dateCreated: moment().format("YYYY-MM-DD"),
         })
       );

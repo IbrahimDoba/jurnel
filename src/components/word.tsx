@@ -31,7 +31,7 @@ function Word() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 max-lg:m-6">
+    <div className="flex flex-col  gap-6 max-lg:m-6">
       <section className=" h-auto flex flex-auto justify-center mt-24 max-lg:mt-10">
         <div className="container flex justify-center flex-col items-center align-middle ">
           {isLoading ? (
@@ -56,7 +56,7 @@ function Word() {
           )}
         </div>
       </section>
-      <div className="mt-[5%] flex justify-center flex-col items-center align-middle">
+      <div className="mt-[5%] absolute left-[47%] top-[70%] justify-center flex-col items-center align-middle max max-md:relative ">
         <button
           type="button"
           onClick={generateName}
