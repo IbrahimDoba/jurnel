@@ -63,7 +63,7 @@ export default function About() {
             </li>
             <li>
               <span className="font-semibold text-emerald-700">
-                Journal Feature:
+                Jurnal Feature:
               </span>{" "}
               Write and store your private journals securely. Access them
               anytime, anywhere with complete peace of mind.
@@ -78,15 +78,15 @@ export default function About() {
           <div className="bg-white shadow-md rounded-lg p-6">
             <div className="mb-4">
               <h3 className="text-xl font-bold text-emerald-800">
-                Journal Pro
+                WordGen Pro
               </h3>
-              <p className="text-gray-700">$4.99/month - 10k word limit</p>
+              <p className="text-gray-700">$4.99/month - 15k word limit</p>
             </div>
             <div>
               <h3 className="text-xl font-bold text-emerald-800">
-                Journal Unlimited
+                WordGen Unlimited
               </h3>
-              <p className="text-gray-700">$9.99/month - Unlimited words</p>
+              <p className="text-gray-700">$9.99 - Unlimited words</p>
             </div>
           </div>
         </section>
