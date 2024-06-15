@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsModalOpen(true)}
                   className="text-red-500 rounded-full px-2 py-[2px] font-semibold cursor-pointer"
                 >
-                  upgrade
+                  Upgrade here!
                 </span>
               ) : (
                 <Link
