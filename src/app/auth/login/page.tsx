@@ -30,7 +30,7 @@ const Login = () => {
             profilePicture: res.user.photoURL ?? undefined,
           })
         );
-        router.push("/journal");
+        router.push("/jurnal");
       })
       .catch(() => {
         setErrorMsg("Invalid credentials");
@@ -72,7 +72,7 @@ const Login = () => {
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="flex w-[70%] justify-center items-center  ">
         <div className="flex flex-col max-lg:hidden">
-          <h1 className="text-4xl font-semibold text-emerald-400 text-center mb-6">Login to Jurnel</h1>
+          <h1 className="text-4xl font-semibold text-emerald-400 text-center mb-6">Login to Jurnal</h1>
           <Image src={loginPNG} alt="Login Png" width={700} />
         </div>
         <div className="w-full max-w-lg mx-auto bg-emerald-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">

@@ -65,7 +65,7 @@ const SignUp = () => {
     )
       .then((res) => {
         console.log("SIGN UP: ", res);
-        router.push("/words");
+        router.push("/login");
       })
       .catch((e) => {
         if (e.message === "Firebase: Error (auth/email-already-in-use).") {
@@ -84,7 +84,7 @@ const SignUp = () => {
       <div className="flex w-[70%] justify-center items-center  ">
         <div className="flex flex-col max-lg:hidden">
           <h1 className="text-4xl font-semibold text-emerald-400 text-center mb-6">
-            Signup to Jurnel
+            Signup to Jurnal
           </h1>
           <Image src={SignupPNG} alt="Login Png" width={900} />
         </div>

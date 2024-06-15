@@ -63,9 +63,9 @@ const Navbar: React.FC = () => {
               {subscription === "free" ? (
                 <span
                   onClick={() => setIsModalOpen(true)}
-                  className="text-red-500 rounded-full px-2 py-[2px] font-semibold cursor-pointer"
+                  className="text-red-500 rounded-full px-2 py-[2px] font-semibold cursor-pointer hover:underline"
                 >
-                  upgrade
+                  Upgrade Here!
                 </span>
               ) : (
                 <Link
