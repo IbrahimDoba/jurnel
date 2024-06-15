@@ -14,12 +14,14 @@ const Tiptap = ({
   defaultContent,
   isLimitExceeded,
   handleEditorChange,
+  usageLeft,
 }: {
   setEditorContent: React.Dispatch<React.SetStateAction<string>>;
   defaultContent: string;
   setInitiateAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
   handleEditorChange: () => void;
   isLimitExceeded: boolean;
+  usageLeft: number;
 }) => {
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
@@ -34,7 +36,7 @@ const Tiptap = ({
     extensions: [
       StarterKit.configure({}),
       CharacterCount.configure({
-        limit,
+        limit: usageLeft,
       }),
       Underline,
     ],
@@ -50,9 +52,7 @@ const Tiptap = ({
       const html = editor.getHTML();
       editor.setOptions();
       handleEditorChange();
-      isLimitExceeded
-        ? setEditorContent(defaultContent)
-        : setEditorContent(html);
+      setEditorContent(html);
     },
   });
 
@@ -63,11 +63,11 @@ const Tiptap = ({
   if (!editor) {
     return null;
   }
-
+  console.log("USAGE: ", usageLeft);
   return (
     <>
       <Toolbar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent maxLength={usageLeft} editor={editor} />
       <Progress editor={editor} percentage={percentage} limit={limit} />
     </>
   );

@@ -163,13 +163,23 @@ export const checkMaxWords = (
 ) => {
   switch (subType) {
     case "free":
-      return totalWordsForTheDay >= 1000 ? true : false;
+      return totalWordsForTheDay >= 1000
+        ? { usageLeft: 1000 - totalWordsForTheDay, isExpired: true }
+        : { usageLeft: 1000 - totalWordsForTheDay, isExpired: false };
     case "pro":
-      return totalWordsForTheDay >= 15000 ? true : false;
+      return totalWordsForTheDay >= 15000
+        ? { usageLeft: 15000 - totalWordsForTheDay, isExpired: true }
+        : { usageLeft: 15000 - totalWordsForTheDay, isExpired: true };
     case "unlimited":
-      return false;
+      return {
+        usageLeft: 90000000000000000000000 - totalWordsForTheDay,
+        isExpired: false,
+      };
     default:
-      false;
+      return {
+        usageLeft: 90000000000000000000000 - totalWordsForTheDay,
+        isExpired: false,
+      };
   }
 };
 export const subscriptionExpired = (expirationDate: string | null) => {

@@ -51,6 +51,7 @@ function JournalEntry({
   const [debounceEditorContent] = useDebounce(editorContent, 1500);
   const [debounceTitle] = useDebounce(journalTitle, 1500);
   const { journals } = useSelector((state: IRootState) => state.journal);
+  const [usageLeft, setUsageLeft] = useState(1000);
   const { subscription } = useSelector(
     (state: IRootState) => state.subscription
   );
@@ -120,12 +121,19 @@ function JournalEntry({
       .filter((j) => j.dateCreated === today)
       .map((eachTodays) => getText(eachTodays.value).length);
     const sumAllTodayEntries = sumArray(findAllTodaysJournals);
-    const checkLimit = checkMaxWords(subscription, sumAllTodayEntries);
-    if (checkLimit) {
+    const { usageLeft, isExpired } = checkMaxWords(
+      subscription,
+      sumAllTodayEntries
+    );
+    setUsageLeft(usageLeft);
+    if (isExpired) {
       setLimitExeeded(true);
       handleShowLimitModal(true);
     }
   };
+  useEffect(() => {
+    handleTrackUsage();
+  }, []);
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
       <span className="text-red-500 font-bold">
@@ -140,9 +148,13 @@ function JournalEntry({
               type="text"
               value={journalTitle}
               onChange={(e) => {
-                setJournalTitle(e.target.value);
-                setInitiateAutoSave(true);
-                handleTrackUsage();
+                if (!isLimitExeeded) {
+                  setJournalTitle(e.target.value);
+                  setInitiateAutoSave(true);
+                  handleTrackUsage();
+                  return;
+                }
+                setJournalTitle(journalTitle);
               }}
               placeholder="Some nice title..."
               spellCheck={false}
@@ -180,6 +192,7 @@ function JournalEntry({
         setInitiateAutoSave={setInitiateAutoSave}
         defaultContent={editorContent}
         setEditorContent={setEditorContent}
+        usageLeft={usageLeft}
       />
     </li>
   );
