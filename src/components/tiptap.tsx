@@ -48,6 +48,11 @@ const Tiptap = ({
       },
     },
     onUpdate({ editor }) {
+      if (usageLeft <= 0) {
+        console.log("RETURNING: ", usageLeft);
+        handleEditorChange();
+        return;
+      }
       setInitiateAutoSave(true);
       const html = editor.getHTML();
       editor.setOptions();
@@ -63,11 +68,11 @@ const Tiptap = ({
   if (!editor) {
     return null;
   }
-  console.log("USAGE: ", usageLeft);
+
   return (
     <>
       <Toolbar editor={editor} />
-      <EditorContent maxLength={usageLeft} editor={editor} />
+      <EditorContent editor={editor} />
       <Progress editor={editor} percentage={percentage} limit={limit} />
     </>
   );
