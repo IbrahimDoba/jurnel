@@ -103,9 +103,11 @@ function JournalEntry({
     setIsSaving(false);
   };
   useEffect(() => {
-    setJournalTitle(title);
-    setEditorContent(body);
-  }, [title, body]);
+    if (usageLeft > 0) {
+      setJournalTitle(title);
+      setEditorContent(body);
+    }
+  }, [title, body, usageLeft]);
 
   // AUTO SAVE
   useEffect(() => {
@@ -129,6 +131,8 @@ function JournalEntry({
     if (isExpired) {
       setLimitExeeded(true);
       handleShowLimitModal(true);
+    } else {
+      setLimitExeeded(false);
     }
   };
   useEffect(() => {
@@ -136,7 +140,7 @@ function JournalEntry({
   }, []);
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
-      <span className="text-red-500 font-bold">
+      <span className="text-red-500 font-bold px-3">
         {isLimitExeeded
           ? "You have reached your maximum limit. Please upgrade your account"
           : ""}

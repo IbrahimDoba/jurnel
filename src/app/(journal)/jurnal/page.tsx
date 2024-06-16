@@ -91,6 +91,7 @@ function Jurnal() {
           dateCreated: moment().format("YYYY-MM-DD"),
         })
       );
+      setTrackDate(moment().format("YYYY-MM-DD"));
       setAddJournalLoading(false);
     });
     // Scroll to the bottom
