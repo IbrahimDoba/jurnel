@@ -1,4 +1,3 @@
-import { firebaseAnalytics } from "@/firebase";
 import { ReduxProvider } from "@/redux/provider";
 import React from "react";
 

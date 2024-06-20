@@ -10,12 +10,14 @@ const firebaseConfig = {
   storageBucket: "jurnel-96e52.appspot.com",
   messagingSenderId: "916849889024",
   appId: "1:916849889024:web:3fbff48f215a8036beede5",
-  measurementId: "G-X2Y68JPRWF"
+  measurementId: "G-X2Y68JPRWF",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const firebaseAnalytics = getAnalytics(app);
+if (typeof window !== "undefined") {
+  getAnalytics(app);
+}
 // DB
 export const db = getFirestore(app);
 export const journalCollectionRef = collection(db, "journal");
