@@ -1,30 +1,10 @@
-import Head from "next/head";
+import MaxWidth from "@/components/shared/max-width";
 import Link from "next/link";
 
 export default function About() {
   return (
-    <div className="bg-emerald-50 min-h-screen">
-      <Head>
-        <title>About Us - WordGen</title>
-      </Head>
-      <header className="bg-emerald-800 text-white py-4">
-        <div className="container mx-auto flex justify-between items-center px-6">
-          <h1 className="text-2xl font-bold">WordGen</h1>
-          <nav className="flex">
-            <Link href="/words">
-              <button className="w-fit mr-3 p-2 flex items-center justify-center font-semibold rounded-full  border-2 border-accent hover:bg-emerald-500 outline-none min-w-[6rem] focus-visible:gap-4 focus-visible:bg-main/10 transition-all duration-300">
-                Words
-              </button>
-            </Link>
-            <Link href="/auth/login">
-              <button className="w-fit p-2 flex items-center justify-center font-semibold rounded-full  border-2 border-accent hover:bg-emerald-500 outline-none min-w-[6rem] focus-visible:gap-4 focus-visible:bg-main/10 transition-all duration-300">
-                Login
-              </button>
-            </Link>
-          </nav>
-        </div>
-      </header>
-      <div className="container mx-auto py-12 px-6">
+    <MaxWidth className="py-12">
+      <div className="container">
         <h1 className="text-4xl font-bold text-emerald-800 mb-6">About Us</h1>
         <p className="text-lg text-gray-700 mb-4">
           Welcome to our private and secure platform where you can explore new
@@ -91,6 +71,6 @@ export default function About() {
           </div>
         </section>
       </div>
-    </div>
+    </MaxWidth>
   );
 }

@@ -10,7 +10,7 @@ import {
   TodoType,
   User,
   journalType,
-} from "../../../types";
+} from "../../../../types";
 import {
   auth,
   journalCollectionRef,

@@ -14,7 +14,7 @@ const config: Config = {
         secondary: 'hsl(204, 86%, 53%)',
         txt: 'hsl(209, 61%, 16%)',
         error: 'hsl(354 84% 57%)',
-        main: 'hsl(157, 68%, 96%)',
+        main: 'hsl(153, 69%, 97%)',
       },
       screens: {
         'max-lg': { max: '1000px' },

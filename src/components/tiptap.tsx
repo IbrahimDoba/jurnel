@@ -3,67 +3,69 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import Placeholder from "@tiptap/extension-placeholder";
 import Progress from "./progress";
 import Toolbar from "./toolbar";
-import { useSelector } from "react-redux";
-import { IRootState } from "@/redux/store";
+import { useContext, useEffect, useState } from "react";
+import LimitContext from "@/context/limit-context";
 
-const Tiptap = ({
-  setEditorContent,
-  setInitiateAutoSave,
-  defaultContent,
-  isLimitExceeded,
-  handleEditorChange,
-  usageLeft,
-}: {
-  setEditorContent: React.Dispatch<React.SetStateAction<string>>;
+interface EditorProps {
   defaultContent: string;
-  setInitiateAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
   handleEditorChange: () => void;
+  setEditorContent: React.Dispatch<React.SetStateAction<string>>;
+  setInitiateAutoSave: React.Dispatch<React.SetStateAction<boolean>>;
   isLimitExceeded: boolean;
   usageLeft: number;
-}) => {
-  const { subscription } = useSelector(
-    (state: IRootState) => state.subscription
-  );
-  const limit =
-    subscription === "free"
-      ? 1000
-      : subscription === "pro"
-      ? 15000
-      : 90000000000000000000000000000000;
+}
+
+const Tiptap = ({
+  defaultContent,
+  setEditorContent,
+  setInitiateAutoSave,
+  handleEditorChange,
+  isLimitExceeded,
+  usageLeft,
+}: EditorProps) => {
+  const { dailyLimit, updateUsage, remainingCharacters } =
+    useContext(LimitContext);
+
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({}),
-      CharacterCount.configure({
-        limit: usageLeft,
-      }),
+      StarterKit,
       Underline,
+      CharacterCount.configure({ limit: dailyLimit }),
+      Placeholder.configure({
+        placeholder: "Dear journal...",
+      }),
     ],
     autofocus: true,
     content: defaultContent,
     editorProps: {
       attributes: {
-        class: `prose prose-stone p-6 focus:outline-none`,
+        class: `prose prose-stone p-6 focus:outline-none min-h-40`,
       },
     },
+    onCreate({ editor }) {
+      // Set the initial character count from default content
+      const initialCharacters = editor.storage.characterCount.characters();
+      updateUsage(initialCharacters);
+    },
     onUpdate({ editor }) {
-      if (usageLeft <= 0) {
-        console.log("RETURNING: ", usageLeft);
-        handleEditorChange();
-        return;
+      const writtenCharacters = editor.storage.characterCount.characters();
+      const charactersUsed =
+        writtenCharacters - editor.storage.characterCount.previousCharacters; // Calculate the characters added in this update
+      editor.storage.characterCount.previousCharacters = writtenCharacters; // Update the previous character count
+
+      if (remainingCharacters - charactersUsed >= 0) {
+        updateUsage(charactersUsed);
       }
-      setInitiateAutoSave(true);
+
       const html = editor.getHTML();
-      editor.setOptions();
-      handleEditorChange();
       setEditorContent(html);
+      setInitiateAutoSave(true);
+      handleEditorChange();
     },
   });
-
-  const percentage = editor
-    ? Math.round((100 / limit) * editor.storage.characterCount.characters())
-    : 0;
 
   if (!editor) {
     return null;
@@ -73,7 +75,7 @@ const Tiptap = ({
     <>
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
-      <Progress editor={editor} percentage={percentage} limit={limit} />
+      {/* <Progress editor={editor} limit={dailyLimit} /> */}
     </>
   );
 };

@@ -1,9 +1,8 @@
+import MaxWidth from '@/components/shared/max-width';
 import Sidebar from '@/components/sidebar';
-import React from 'react';
 import type { Metadata } from 'next';
-import { ToastContainer } from 'react-toastify';
+import React from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import Navbar from '@/components/navbar';
 
 export const metadata: Metadata = {
   title: 'Journal',
@@ -12,11 +11,9 @@ export const metadata: Metadata = {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <Navbar />
-      <ToastContainer />
-      <main className='min-h-screen relative grid grid-cols-[auto_1fr]'>
+      <main className='h-full relative grid md:grid-cols-[auto_1fr]'>
         <Sidebar />
-        <div className='min-h-[calc(100vh-60px)]'>{children}</div>
+        <MaxWidth>{children}</MaxWidth>
       </main>
     </>
   );

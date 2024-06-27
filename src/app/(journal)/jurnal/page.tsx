@@ -1,41 +1,41 @@
-"use client";
-import AddNew from "@/components/add-new";
-import JournalControls from "@/components/journal-controls";
-import JournalEntry from "@/components/journal-entry";
-import { defaultHtml } from "@/data/default";
+'use client';
+import AddNew from '@/components/add-new';
+import JournalControls from '@/components/journal-controls';
+import JournalEntry from '@/components/journal-entry';
+import { defaultHtml } from '@/data/default';
 import {
   db,
   journalCollectionRef,
   subscriptionCollectionRef,
-} from "@/firebase";
+} from '@/firebase';
 import {
   addJournal,
   deleteJournal,
   fetchJournals,
   updateJournal,
-} from "@/redux/journal/journalSlice";
+} from '@/redux/journal/journalSlice';
 import {
   getDateByOperation,
   sortJournalsByDate,
   subscriptionExpired,
-} from "@/utils/helpers";
-import { addDoc, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+} from '@/utils/helpers';
+import { addDoc, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore';
+import { useEffect, useRef, useState } from 'react';
 import {
   BackendSubscriptionType,
   DisplayJournalType,
   journalType,
-} from "../../../../types";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
-import { IRootState } from "@/redux/store";
-import moment from "moment";
-import { nanoid } from "nanoid";
+} from '../../../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { IRootState } from '@/redux/store';
+import moment from 'moment';
+import { nanoid } from 'nanoid';
 import {
   loadSubscription,
   subExpired,
-} from "@/redux/subscription/subscriptionSlice";
-import PremiumModal from "@/components/premiumModal";
+} from '@/redux/subscription/subscriptionSlice';
+import PremiumModal from '@/components/premiumModal';
 
 type NewEntry = {
   id: string;
@@ -43,20 +43,13 @@ type NewEntry = {
   value: string;
   dateCreated: string;
 };
-const dummyEntries = [
-  {
-    id: "1",
-    title: "Welcome to Jurnal by Wordgen 🎉",
-    value: defaultHtml,
-    dateCreated: moment().format("YYYY-MM-DD"),
-  },
-  {
-    id: "2",
-    title: "Welcome to Jurnal by Wordgen 🎉",
-    value: "<p>Hello World</p>",
-    dateCreated: moment().format("YYYY-MM-DD"),
-  },
-];
+
+const welcomeEntry = {
+  id: nanoid(),
+  title: 'Welcome to Jurnal by Wordgen 🎉',
+  value: defaultHtml,
+  dateCreated: moment().format('YYYY-MM-DD'),
+};
 
 function Jurnal() {
   const [noEntryForDate, setNoEntryForDate] = useState({
@@ -67,10 +60,10 @@ function Jurnal() {
   const [limitModal, setLimitModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [trackDate, setTrackDate] = useState("");
+  const [trackDate, setTrackDate] = useState('');
   const [displayJournals, setDisplayJournals] = useState<DisplayJournalType>({
     activeJournal: [],
-    dateCreated: "",
+    dateCreated: '',
   });
   const lastEntryRef = useRef<HTMLDivElement | null>(null);
 
@@ -78,42 +71,42 @@ function Jurnal() {
     setAddJournalLoading(true);
     await addDoc(journalCollectionRef, {
       userEmail: user.email,
-      title: "Welcome to Jurnal by Wordgen 🎉",
-      value: "<p>Dear Jurnal.</p>",
-      dateCreated: moment().format("YYYY-MM-DD"),
+      title: 'Welcome to Jurnal by Wordgen 🎉',
+      value: '',
+      dateCreated: moment().format('YYYY-MM-DD'),
     } as journalType).then((res) => {
       dispatch(
         addJournal({
           userEmail: user.email,
           id: res.id,
-          title: "Welcome to Jurnal by Wordgen 🎉",
-          value: "<p>Dear Jurnal.</p>",
-          dateCreated: moment().format("YYYY-MM-DD"),
+          title: 'Welcome to Jurnal by Wordgen 🎉',
+          value: '',
+          dateCreated: moment().format('YYYY-MM-DD'),
         })
       );
-      setTrackDate(moment().format("YYYY-MM-DD"));
+      setTrackDate(moment().format('YYYY-MM-DD'));
       setAddJournalLoading(false);
     });
     // Scroll to the bottom
     if (lastEntryRef.current) {
-      lastEntryRef.current.scrollIntoView({ behavior: "smooth" });
+      lastEntryRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    console.log("EXECUTED:");
+    console.log('EXECUTED:');
   };
 
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   const { journals } = useSelector((state: IRootState) => state.journal);
   const router = useRouter();
   const dispatch = useDispatch();
-  const today = moment().format("YYYY-MM-DD");
+  const today = moment().format('YYYY-MM-DD');
 
   const handleLimitExceeded = (val: boolean) => {
     setLimitModal(val);
   };
-  const handleRenderJournalByDate = (operation: "next" | "previous") => {
+  const handleRenderJournalByDate = (operation: 'next' | 'previous') => {
     const { dateValue, isNextAvailable, isPreviousAvailable } =
       getDateByOperation(journals, displayJournals.dateCreated, operation);
-    console.log("DATE VALUE PRETURNED: ", dateValue);
+    console.log('DATE VALUE PRETURNED: ', dateValue);
 
     setNoEntryForDate({
       next: !isNextAvailable,
@@ -153,7 +146,7 @@ function Jurnal() {
           // subscription expired
           dispatch(subExpired());
         } else if (findUserSub) {
-          console.log("I FOUND UR SUB");
+          console.log('I FOUND UR SUB');
           dispatch(loadSubscription(findUserSub));
         }
         const allJournals: any = journals.docs.map((journal) => ({
@@ -168,14 +161,14 @@ function Jurnal() {
         setIsLoading(false);
       })();
     } else {
-      router.push("/auth/login");
+      router.push('/auth/login');
     }
   }, [dispatch, user.email, isLogged, router, today]);
 
   //BELOW useEffect KEEPS TRACK OF THE JOURNAL STATE CHANGES
   useEffect(() => {
     const checkTodayAvailable = journals.filter((j) => j.dateCreated === today);
-    if (trackDate !== "") {
+    if (trackDate !== '') {
       const persistDisplay = journals.filter(
         (j) => j.dateCreated === trackDate
       );
@@ -210,7 +203,7 @@ function Jurnal() {
       const { isNextAvailable, isPreviousAvailable } = getDateByOperation(
         journals,
         displayJournals.dateCreated,
-        "previous"
+        'previous'
       );
 
       setNoEntryForDate({
@@ -226,8 +219,8 @@ function Jurnal() {
   }, [displayJournals, today, journals]);
 
   return (
-    <section className="grid gap-4 lg:grid-cols-[auto_1fr] items-start w-full h-full py-10">
-      <div className="lg:sticky top-10 h-20 w-full px-6 rounded-md flex items-center justify-center">
+    <section className='grid gap-4 lg:grid-cols-[auto_1fr] items-start w-full h-full py-10'>
+      <div className='lg:sticky top-10 h-20 w-full px-6 rounded-md flex items-center justify-center'>
         {/* date component can br passed necessary fn or brought here */}
         <JournalControls
           noEntryForDate={noEntryForDate}
@@ -235,16 +228,16 @@ function Jurnal() {
           handleRenderJournalByDate={handleRenderJournalByDate}
         />
       </div>
-      <ul className="flex flex-col gap-10 items-center">
+      <ul className='flex flex-col gap-10 items-center'>
         {/* Welcome entry */}
         {displayJournals.activeJournal.length <= 0 &&
           displayJournals.dateCreated === today && (
             <JournalEntry
               handleShowLimitModal={handleLimitExceeded}
-              id={dummyEntries[0].id ?? ""}
-              title={dummyEntries[0].title}
-              body={dummyEntries[0].value}
-              dateCreated={dummyEntries[0].dateCreated}
+              id={welcomeEntry.id}
+              title={welcomeEntry.title}
+              body={welcomeEntry.value}
+              dateCreated={welcomeEntry.dateCreated}
               welcomeEntry
             />
           )}
@@ -253,7 +246,7 @@ function Jurnal() {
           <JournalEntry
             handleShowLimitModal={handleLimitExceeded}
             key={entry.id ?? nanoid()}
-            id={entry.id ?? ""}
+            id={entry.id ?? ''}
             title={entry.title}
             body={entry.value}
             dateCreated={entry.dateCreated}
@@ -275,6 +268,7 @@ function Jurnal() {
             ))} */}
       </ul>
       {/* New entry button */}
+      {/* hide this component for free tier users so they cant add multipe entries and are limited to one entry daily this makes managing editor limit simple  */}
       <AddNew
         isLoading={addJournalLoading}
         handleCreateJournal={handleCreateJournal}
