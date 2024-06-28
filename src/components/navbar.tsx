@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import PremiumModal from "./premiumModal";
+import DailyLimitProgressbar from "./daily-limit-progressbar";
 
 const Navbar: React.FC = () => {
   const { isLogged } = useSelector((state: IRootState) => state.user);
@@ -16,7 +17,7 @@ const Navbar: React.FC = () => {
   const handleClose = () => setIsModalOpen(false);
   return (
     <>
-      <header className="sticky z-30 top-0 flex justify-center items-center bg-main border-b border-b-primary py-3 px-6 md:px-8 lg:px-24 max-w-[90rem] mx-auto">
+      <header className="sticky max-md:hidden w-full z-30 top-0 flex justify-center items-center backdrop-blur-md bg-main/80 border-b border-emerald-100 py-3 px-6 md:px-8 lg:px-24 max-w-[90rem] mx-auto">
         <ul className="py-2 px-8 rounded-full bg-primary flex items-center justify-center gap-4 lg:gap-6 text-accent text-sm font-semibold">
           <li>
             <Link
@@ -91,6 +92,14 @@ const Navbar: React.FC = () => {
             </li>
           )}
         </ul>
+        {/* only show this comp for free tier users */}
+        {
+          pathname === '/jurnal' && (
+            <div className='fixed right-20'>
+              <DailyLimitProgressbar/>
+            </div>
+          )
+        }
       </header>
       <PremiumModal isOpen={isModalOpen} onClose={handleClose} />
     </>

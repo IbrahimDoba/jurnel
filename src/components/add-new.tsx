@@ -1,8 +1,7 @@
 "use client";
 import moment from "moment";
 import React from "react";
-import { MdOutlineAdd } from "react-icons/md";
-import { ColorRing } from "react-loader-spinner";
+import {Loader2, Plus} from 'lucide-react'
 
 function AddNew({
   addNewEntry,
@@ -24,17 +23,9 @@ function AddNew({
         onClick={addNewEntry}
       >
         {isLoading ? (
-          <ColorRing
-            visible={true}
-            height="80"
-            width="80"
-            ariaLabel="color-ring-loading"
-            wrapperStyle={{}}
-            wrapperClass="color-ring-wrapper"
-            colors={["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]}
-          />
+          <Loader2 className='animate-spin transition w-5 h-5'/>
         ) : (
-          <MdOutlineAdd size={20} />
+          <Plus size={20} />
         )}
       </button>
 

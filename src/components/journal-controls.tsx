@@ -1,6 +1,6 @@
 import { checkIsTodayOrYesterday } from "@/utils/helpers";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import moment from "moment";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 function JournalControls({
   handleRenderJournalByDate,
@@ -16,7 +16,7 @@ function JournalControls({
 }) {
   const isToday = moment().format("YYYY-MM-DD") === dateCreated;
   return (
-    <div className="lg:fixed top-16 left-40 flex flex-col gap-1">
+    <div className="lg:fixed top-20 left-40 flex flex-col gap-1">
       <div className="flex gap-2 justify-center items-center">
         <button
           type="button"
@@ -27,7 +27,7 @@ function JournalControls({
           onClick={() => handleRenderJournalByDate("previous")}
           disabled={noEntryForDate.previous}
         >
-          <BiChevronLeft size={25} />
+          <ChevronLeft size={25} />
         </button>
         <span className="p-2 text-sm font-semibold text-accent bg-primary rounded-full">
           WG
@@ -41,7 +41,7 @@ function JournalControls({
             noEntryForDate.next || isToday ? "bg-[#a0f9db]" : "bg-accent"
           } p-0.5 rounded-md text-white`}
         >
-          <BiChevronRight size={25} />
+          <ChevronRight size={25} />
         </button>
       </div>
       <div className="leading-4 flex flex-col items-center">

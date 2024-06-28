@@ -1,29 +1,24 @@
 'use client';
-import SidebarLink from './sidebar-link';
-import UserButton from './user-button';
-import SignInButton from './sign-in-button';
-import { BsJournal, BsJournals } from 'react-icons/bs';
-import { TiPen } from 'react-icons/ti';
 import Image from 'next/image';
-import { FiPlusCircle } from 'react-icons/fi';
-import { CiCircleList } from 'react-icons/ci';
+import SidebarLink from './sidebar-link';
+import SignInButton from './sign-in-button';
+import UserButton from './user-button';
 
+import { IRootState } from '@/redux/store';
+import { BookMarked, List } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { IRootState } from '@/redux/store';
 
 const Sidebar = () => {
   const { user } = useSelector((state: IRootState) => state.user);
 
-  const pathname = usePathname();
-
   return (
     <>
       <aside
-        className={`max-md:hidden z-30 border-r border-dashed border-r-primary bg-main transition-all duration-300 sticky top-0 h-full max-h-[100svh]`}
+        className={`max-md:hidden z-30 border-r border-dashed border-r-primary bg-main transition-all duration-300 sticky top-[61px] h-full max-h-[calc(100vh-61px)]`}
       >
-        <nav className=' h-[90%] flex flex-col gap-6 py-6 px-4 justify-between transition-all duration-300'>
+        <nav className='h-full flex flex-col gap-6 py-6 px-4 justify-between transition-all duration-300'>
           <div className='relative flex justify-between items-center'>
             <Link href='/words' className='flex text-xl items-center font-bold'>
               <Image
@@ -41,12 +36,12 @@ const Sidebar = () => {
             <SidebarLink
               path='/jurnal '
               text='jurnal '
-              icon={<BsJournals size={20} />}
+              icon={<BookMarked size={20} />}
             />
             <SidebarLink
               path='/lists'
               text='lists'
-              icon={<CiCircleList size={20} />}
+              icon={<List size={20} />}
             />
           </ul>
 

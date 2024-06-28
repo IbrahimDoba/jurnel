@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { itemProps } from "./page";
-import { FaTrash } from "react-icons/fa";
+import { Trash } from "lucide-react";
 import { TodoItemType, TodoType } from "../../../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "@/redux/store";
@@ -12,7 +12,6 @@ import {
   deleteTodoCategory,
   updateCategoryHeader,
 } from "@/redux/todo/todoSlice";
-import { BiSave } from "react-icons/bi";
 import TodoItemCard from "@/components/todoItemCard";
 import { toast } from "react-toastify";
 import { useDebounce } from "use-debounce";
@@ -166,7 +165,7 @@ const Todolist = ({
           onClick={handleDelete}
           className="text-red-500 group-hover:visible p-1.5 rounded-md hover:bg-red-200"
         >
-          <FaTrash />
+          <Trash size={20}/>
         </button>
       </div>
       <div className="flex flex-col">

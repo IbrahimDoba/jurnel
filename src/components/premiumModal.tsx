@@ -1,7 +1,7 @@
 "use client";
 import { IRootState } from "@/redux/store";
+import { X } from "lucide-react";
 import React from "react";
-import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
 
 const PremiumModal = ({
@@ -13,17 +13,20 @@ const PremiumModal = ({
 }) => {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
   if (!isOpen) return null;
+
+
+  
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-emerald-100 rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-6">
+      <div className="bg-emerald-100 rounded-lg shadow-lg w-full max-w-xs md:max-w-md lg:max-w-2xl">
         <div className="p-4 flex justify-end">
-          <button onClick={onClose}>
-            <IoClose size={24} />
+          <button title="close" type="button" onClick={onClose}>
+            <X size={24} />
           </button>
         </div>
         <div className="p-6 text-center">
           <div className="flex justify-center items-center">
-            <h2 className="text-xl font-bold mb-8 w-[60%]">
+            <h2 className="text-xl font-bold mb-8 max-w-prose">
               <span className="text-emerald-500">Boundless</span>...
               appreciation, embracing change, expressing frustrations,
               strategizing, uncovering personal insights, and continuous

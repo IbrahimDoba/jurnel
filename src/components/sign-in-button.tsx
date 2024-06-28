@@ -1,11 +1,11 @@
+import { LogIn } from 'lucide-react';
 import Link from 'next/link';
-import { LuLogIn } from 'react-icons/lu';
 
 function SignInButton() {
   return (
     <div className='relative group'>
       <Link href={'/auth/login'} className='hover:text-accent flex items-center justify-center'>
-        <LuLogIn size={20} />
+        <LogIn size={20} />
       </Link>
       <div
         className={`max-md:hidden

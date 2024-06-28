@@ -1,10 +1,9 @@
 "use client";
 import { logout } from "@/redux/auth/authSlice";
+import { LogOut, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
-import { BiLogOut } from "react-icons/bi";
-import { CgUser } from "react-icons/cg";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import PremiumModal from "./premiumModal";
 
@@ -60,7 +59,7 @@ function UserButton({ user }: { user: UserButtonProps }) {
               className="rounded-full"
             />
           ) : (
-            <CgUser className="text-emerald-500" size={30} />
+            <User className="text-emerald-500" />
           )}
         </button>
       </div>
@@ -84,7 +83,7 @@ function UserButton({ user }: { user: UserButtonProps }) {
           </button>
         </div>
         <div className="flex gap-4 py-4 px-5 items-center border-b text-accent">
-          <CgUser size={18} />
+          <User size={18} />
           <div className="flex flex-col">
             <p>{user.name}</p>
             <Link href="/profile">Profile</Link>
@@ -96,7 +95,7 @@ function UserButton({ user }: { user: UserButtonProps }) {
           className="flex gap-4 items-center py-4 px-5 text-accent hover:bg-primary transition duration-300"
           onClick={() => dispatch(logout())}
         >
-          <BiLogOut size={18} />
+          <LogOut size={18} />
           <span className="text-sm">sign out</span>
         </button>
       </div>

@@ -5,8 +5,6 @@ import { db, journalCollectionRef } from "@/firebase";
 import { journalType } from "../../types";
 import { IRootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { BiSave } from "react-icons/bi";
-import { LuTrash } from "react-icons/lu";
 import Tiptap from "./tiptap";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import parse from "html-react-parser";
@@ -19,6 +17,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { checkMaxWords, getText, sumArray } from "@/utils/helpers";
 import PremiumModal from "./premiumModal";
+import { Save, Trash } from "lucide-react";
 
 interface Entry {
   id: string;
@@ -42,7 +41,7 @@ function JournalEntry({
   handleShowLimitModal: (val: boolean) => void;
 }) {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
-  const [isLimitExeeded, setLimitExeeded] = useState(false);
+  const [isLimitExceeded, setLimitExceeded] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [journalTitle, setJournalTitle] = useState<string>(title);
@@ -129,10 +128,10 @@ function JournalEntry({
     );
     setUsageLeft(usageLeft);
     if (isExpired) {
-      setLimitExeeded(true);
+      setLimitExceeded(true);
       handleShowLimitModal(true);
     } else {
-      setLimitExeeded(false);
+      setLimitExceeded(false);
     }
   };
   useEffect(() => {
@@ -141,7 +140,7 @@ function JournalEntry({
   return (
     <li className="flex flex-col w-full max-w-screen-sm mx-auto shadow rounded-md bg-white">
       <span className="text-red-500 font-bold px-3">
-        {isLimitExeeded
+        {isLimitExceeded
           ? "You have reached your maximum limit. Please upgrade your account"
           : ""}
       </span>
@@ -152,7 +151,7 @@ function JournalEntry({
               type="text"
               value={journalTitle}
               onChange={(e) => {
-                if (!isLimitExeeded) {
+                if (!isLimitExceeded) {
                   setJournalTitle(e.target.value);
                   setInitiateAutoSave(true);
                   handleTrackUsage();
@@ -177,7 +176,7 @@ function JournalEntry({
               disabled={isSaving}
               className="hover:bg-primary rounded-md p-1 h-fit w-fit transition duration-200 hover:text-accent"
             >
-              <BiSave size={20} />
+              <Save size={20} />
             </button>
             <button
               title="delete"
@@ -185,14 +184,14 @@ function JournalEntry({
               onClick={handleDelete}
               className="hover:bg-red-200 rounded-md p-1 h-fit w-fit transition duration-200 hover:text-red-500"
             >
-              <LuTrash size={20} />
+              <Trash size={20} />
             </button>
           </div>
         )}
       </div>
       <Tiptap
         handleEditorChange={() => handleTrackUsage()}
-        isLimitExceeded={isLimitExeeded}
+        isLimitExceeded={isLimitExceeded}
         setInitiateAutoSave={setInitiateAutoSave}
         defaultContent={editorContent}
         setEditorContent={setEditorContent}

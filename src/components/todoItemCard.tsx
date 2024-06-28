@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { BiSave } from "react-icons/bi";
-import { FaTrash } from "react-icons/fa";
+import { Save, Trash } from "lucide-react";
 import { TodoItemType } from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "@/redux/store";
@@ -141,7 +140,7 @@ const TodoItemCard = ({
               disabled={isSaving}
               className="hover:bg-primary rounded-md p-1 h-fit w-fit transition duration-200 hover:text-accent"
             >
-              <BiSave size={20} />
+              <Save size={20} />
             </button>
           )}
           <button
@@ -150,7 +149,7 @@ const TodoItemCard = ({
             onClick={handleDelete}
             className="text-red-500 opacity-0 group-hover:opacity-100 p-1.5 rounded-md hover:bg-red-200 transition-all duration-300"
           >
-            <FaTrash />
+            <Trash size={20}/>
           </button>
         </div>
       </li>
