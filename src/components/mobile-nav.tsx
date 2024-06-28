@@ -31,16 +31,18 @@ function MobileNav() {
       {/* logo */}
       <MaxWidth className="flex items-center justify-between">
         {/* nav-controls */}
-         <Link href="/" className="flex items-center gap-2">
-            <BookMarked size={24} />
-            <span className="text-lg font-semibold">WG</span>
-         </Link>
+        <Link
+            href="/"
+            className="flex items-center gap-2 font-semibold text-emerald-600 lg:text-lg"
+          >
+            <p>WordGen</p>
+          </Link>
         <button
           type="button"
           title="toggle menu"
           aria-controls="mobile-menu"
           onClick={() => setExpanded((prev) => !prev)}
-          className="z-50 flex h-7 flex-col justify-center gap-1 rounded-sm bg-emerald-500 p-1 outline-2 outline-offset-2 md:hidden"
+          className="z-50 flex h-7 flex-col justify-center gap-1 rounded-sm bg-emerald-500 p-1.5 outline-2 outline-offset-2 md:hidden"
         >
           <span
             className={`h-0.5 w-6 rounded-full bg-white transition duration-500 ${
