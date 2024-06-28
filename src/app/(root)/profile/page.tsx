@@ -3,11 +3,9 @@ import { IRootState } from "@/redux/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { VscArrowCircleLeft } from "react-icons/vsc";
 import { useSelector } from "react-redux";
-import profile from "../../../public/profile.png";
-import { usePathname } from "next/navigation";
 import PremiumModal from "@/components/premiumModal";
+import { ArrowLeftCircle } from "lucide-react";
 
 const Profile = () => {
   const { user, isLogged } = useSelector((state: IRootState) => state.user);
@@ -31,7 +29,7 @@ const Profile = () => {
       <div className="flex flex-row-reverse justify-around items-center w-[1400px] p-8">
         <div className="max-lg:hidden ml-10">
           <Image
-            src={profile}
+            src={'/profile.png'}
             width={800}
             alt="profile image"
             className="shadow-lg fill"
@@ -72,7 +70,7 @@ const Profile = () => {
             href="/jurnal"
             className=" text-emerald-400 cursor-pointer hover:scale-100 duration-150"
           >
-            <VscArrowCircleLeft size={40} />
+            <ArrowLeftCircle />
           </Link>
           <h2 className="text-2xl font-bold mb-6 text-emerald-600 pt-5">
             Profile
