@@ -160,7 +160,7 @@ export default function Home() {
 
           <div className="mt-8 flex w-full items-center justify-center">
             <Link
-              href="/login"
+              href="/auth/login"
               className="flex w-fit items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-white transition duration-300 hover:bg-emerald-600/80"
             >
               Start journaling now
